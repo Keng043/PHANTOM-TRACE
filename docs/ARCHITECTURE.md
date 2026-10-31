@@ -45,3 +45,9 @@ Online lab, initially single-region. Use managed PostgreSQL with TLS, HTTPS host
 Participant research consent is versioned and separated from each optional experiment capability. `CapabilityConsent` records a participant's opt-in state and withdrawal timestamp per session and capability. A research-consent record never substitutes for a browser or operating-system permission grant. Device APIs must request their native permission at point of use. Remote support requires a separately installed, visible, independently approved support session; selecting the study option does not enable remote access.
 
 See [Phase 6 — Experiment & Consent Engine](./phase-6-experiment-consent.md) for the participant flow, API contracts, migration, and boundaries.
+
+## Phase 7 — native device permission modules
+
+The participant control panel offers Notification, Screen Sharing, and Camera tests only when the matching Phase 6 capability consent is active. Native permission prompts are invoked only from a direct participant action. Screen and camera streams are previewed locally in the browser, never uploaded or persisted, and are stopped when consent is withdrawn or the page is left. Permission outcomes are allow-listed and written as minimal telemetry through a same-origin, session-bound, consent-gated API. No microphone, remote-control, or background-agent capability is included.
+
+See [Phase 7 — Device Permission Modules](./phase-7-device-permissions.md) for API behavior, browser constraints, and verification details.

@@ -144,3 +144,23 @@ label.capability-option.selected{border-color:#397d79;background:#102725}
 .experiment-empty{padding:15px;border:1px dashed #3b5064;border-radius:8px;color:#9aadc0;font-size:10px;line-height:1.7}
 .experiment-end{width:100%;margin-top:10px}
 @media(max-width:560px){.capability-option{gap:8px;padding:10px}.capability-copy small{font-size:8px}.sim-revoke{padding:6px;font-size:8px}}
+
+/* PHASE 7 — native device permission lab */
+.permission-lab{margin:25px 0;padding:18px;border:1px solid #2a4055;border-radius:10px;background:#0b1724}
+.permission-lab>.capability-heading{margin:0 0 14px}
+.permission-lab>.capability-heading>svg{color:#72d5c8}
+.permission-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.permission-card{display:flex;flex-direction:column;gap:10px;min-width:0;padding:13px;border:1px solid #2b4055;border-radius:8px;background:#101f2e}
+.permission-card-head{display:flex;align-items:center;gap:9px}
+.permission-card-head>div{display:grid;gap:4px;min-width:0}
+.permission-card-head strong{font-size:11px;color:#e0eaf4}
+.permission-card-head small{font-size:8px;color:#7f9aaf}
+.permission-card>p{min-height:57px;margin:0;font-size:9px;line-height:1.7;color:#9aadc0}
+.permission-state{color:#70d6c6!important;min-height:0!important}
+.permission-action,.permission-stop{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:34px;padding:8px;border:1px solid #397a79;border-radius:6px;background:#123432;color:#a8eee2;font-size:9px;line-height:1.4}
+.permission-action:disabled,.permission-stop:disabled{opacity:.4;cursor:not-allowed}
+.permission-stop{border-color:#76504a;background:#291b1d;color:#efb4aa}
+.permission-preview{width:100%;max-height:150px;aspect-ratio:16/9;object-fit:contain;background:#050a10;border:1px solid #30455a;border-radius:6px}
+.permission-footnote{display:flex;align-items:flex-start;gap:7px;margin:13px 0 0;color:#8299ad;font-size:9px;line-height:1.7}
+.permission-footnote svg{flex-shrink:0;margin-top:1px;color:#7bd6c7}
+@media(max-width:720px){.permission-grid{grid-template-columns:1fr}.permission-card>p{min-height:0}}
