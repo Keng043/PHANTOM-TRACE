@@ -5,9 +5,18 @@ import { hasValidOrigin } from "@/lib/security/request";
 import { getSessionExpiry } from "@/lib/simulation/tracking";
 import { ExperimentConsentSchema } from "@/lib/validation/experiment-consent";
 import { createSessionSecret, hashSessionSecret, SESSION_COOKIE, SESSION_TTL_SECONDS } from "@/lib/simulation/session";
+import { consumeRateLimit, getTrustedClientAddress, opaqueRateLimitKey } from "@/lib/security/rate-limit";
 
 export async function POST(request: NextRequest) {
   if (!hasValidOrigin(request)) return NextResponse.json({ error: "Invalid request origin." }, { status: 403 });
+  const address = getTrustedClientAddress(request);
+  if (!address && process.env.NODE_ENV === "production") return NextResponse.json({ error: "Request could not be rate-limited safely." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  try {
+    const limit = await consumeRateLimit(opaqueRateLimitKey("session-create", address ?? "local-development"), 10, 10 * 60);
+    if (!limit.allowed) return NextResponse.json({ error: "Too many experiment sessions from this network. Try again later." }, { status: 429, headers: { "Cache-Control": "no-store", "Retry-After": String(limit.retryAfterSeconds) } });
+  } catch {
+    return NextResponse.json({ error: "Experiment sessions are temporarily unavailable." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
   const parsed = ExperimentConsentSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success || parsed.data.policyVersion !== POLICY_VERSION) {
     return NextResponse.json({ error: "Please review the current experiment notice before starting." }, { status: 400 });

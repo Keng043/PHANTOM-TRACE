@@ -56,7 +56,10 @@ export function RemoteAssistParticipant({ authorized }: { authorized: boolean })
       streamRef.current = stream;
       await post({ action: "approve" });
       setRoom({ ...room, status: "ACTIVE" });
-      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+      const configResponse = await fetch("/api/simulation/support", { cache: "no-store" });
+      if (!configResponse.ok) throw new Error("Could not retrieve approved connection configuration.");
+      const connectionConfig = await configResponse.json();
+      const pc = new RTCPeerConnection({ iceServers: (connectionConfig.iceServers ?? []) as RTCIceServer[] });
       pcRef.current = pc;
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
       pc.onicecandidate = (event) => {

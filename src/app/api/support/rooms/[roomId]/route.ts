@@ -5,6 +5,8 @@ import { prisma } from "@/lib/db";
 import { POLICY_VERSION } from "@/lib/security/consent";
 import { hasValidOrigin } from "@/lib/security/request";
 import { StaffSupportActionSchema } from "@/lib/validation/support";
+import { writeSupportSignal } from "@/lib/support/authorization";
+import { buildIceServers } from "@/lib/support/ice-servers";
 type Context = { params: Promise<{ roomId: string }> };
 async function access(roomId: string) {
   const user = await getCurrentUser();
@@ -20,7 +22,7 @@ export async function GET(request: NextRequest, context: Context) {
   const after = request.nextUrl.searchParams.get("after");
   const date = after ? new Date(after) : new Date(0);
   const signals = await prisma.supportSignal.findMany({ where: { roomId, sender: "PARTICIPANT", ...(Number.isFinite(date.getTime()) ? { createdAt: { gte: date } } : {}) }, orderBy: { createdAt: "asc" }, take: 40, select: { id: true, kind: true, payload: true, createdAt: true } });
-  return NextResponse.json({ room: auth.room, signals }, { headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json({ room: auth.room, signals, iceServers: auth.room.status === "ACTIVE" ? buildIceServers(roomId) : [] }, { headers: { "Cache-Control": "no-store" } });
 }
 export async function POST(request: NextRequest, context: Context) {
   if (!hasValidOrigin(request)) return NextResponse.json({ error: "Invalid origin." }, { status: 403 });
@@ -37,6 +39,12 @@ export async function POST(request: NextRequest, context: Context) {
     return NextResponse.json({ ok: true });
   }
   if (auth.room.status !== "ACTIVE") return NextResponse.json({ error: "Participant approval is required." }, { status: 403 });
-  await prisma.supportSignal.create({ data: { roomId, sender: "STAFF", kind: parsed.data.kind, payload: parsed.data.payload as Prisma.InputJsonValue } });
+  const result = await writeSupportSignal({
+    roomId, createdById: auth.user.id, sender: "STAFF",
+    kind: parsed.data.kind, payload: parsed.data.payload as Prisma.InputJsonValue,
+  });
+  if (result === "inactive") return NextResponse.json({ error: "The room is closed or participant consent is no longer active." }, { status: 403 });
+  if (result === "rate_limited") return NextResponse.json({ error: "Signaling rate limit reached." }, { status: 429, headers: { "Retry-After": "60" } });
+  if (result === "retry") return NextResponse.json({ error: "Please retry signaling." }, { status: 409 });
   return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
 }

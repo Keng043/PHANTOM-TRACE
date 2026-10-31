@@ -98,6 +98,25 @@ async function main() {
     });
     assertStatus("Approved participant can submit bounded WebRTC offer", offer.status, 200);
 
+    for (let index = 0; index < 29; index++) {
+      const candidate = await fetch(`${base}/api/simulation/support`, {
+        method: "POST", headers: { Origin: base, Cookie: participantCookie, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "signal", kind: "ICE",
+          payload: { candidate: `candidate:${index} 1 udp 2122260223 192.0.2.1 5000 typ host`, sdpMid: null, sdpMLineIndex: 0 },
+        }),
+      });
+      assertStatus(`Participant signaling within rate limit (${index + 1}/29)`, candidate.status, 200);
+    }
+    const throttled = await fetch(`${base}/api/simulation/support`, {
+      method: "POST", headers: { Origin: base, Cookie: participantCookie, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "signal", kind: "ICE",
+        payload: { candidate: "candidate:overflow 1 udp 2122260223 192.0.2.1 5000 typ host", sdpMid: null, sdpMLineIndex: 0 },
+      }),
+    });
+    assertStatus("Participant signaling is throttled after 30 messages per minute", throttled.status, 429);
+
     const received = await fetch(`${base}/api/support/rooms/${room.id}`, { headers: { Cookie: staffCookie } });
     assertStatus("Room owner can receive participant signaling", received.status, 200);
     const receivedData = await received.json() as { room: { status: string }; signals: { kind: string }[] };
