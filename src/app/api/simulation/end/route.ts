@@ -19,6 +19,9 @@ export async function POST(request: NextRequest) {
           where: { sessionId: session.id, granted: true, revokedAt: null },
           data: { granted: false, revokedAt: endedAt },
         });
+        const rooms = await tx.supportRoom.findMany({ where: { sessionId: session.id, status: { in: ["PENDING", "ACTIVE"] } }, select: { id: true } });
+        await tx.supportRoom.updateMany({ where: { sessionId: session.id, status: { in: ["PENDING", "ACTIVE"] } }, data: { status: "CLOSED", closedAt: endedAt } });
+        if (rooms.length) await tx.supportSignal.deleteMany({ where: { roomId: { in: rooms.map((room) => room.id) } } });
         await tx.session.updateMany({
           where: { id: session.id, endedAt: null },
           data: { endedAt },

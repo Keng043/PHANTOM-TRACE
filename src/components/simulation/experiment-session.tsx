@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, CircleOff, Fingerprint, ShieldCheck } from "lucide-react";
 import { DevicePermissionLab } from "@/components/simulation/device-permission-lab";
+import { RemoteAssistParticipant } from "@/components/simulation/remote-assist-participant";
+import { POLICY_VERSION } from "@/lib/security/consent";
 
-type Capability = { capability: string; granted: boolean; grantedAt: string | null; revokedAt: string | null };
+type Capability = { capability: string; granted: boolean; grantedAt: string | null; revokedAt: string | null; policyVersion: string };
 const labels: Record<string, string> = {
   NOTIFICATION: "Notifications", SCREEN_SHARING: "Screen sharing", INTERACTION_TRACKING: "Interaction signals",
   REMOTE_SUPPORT: "Remote support study", CAMERA: "Camera access study",
@@ -61,8 +63,9 @@ export function ExperimentSession() {
       <div className="sim-eyebrow"><ShieldCheck size={14}/> YOUR PARTICIPANT CONTROL PANEL</div>
       <h1>Consent stays<br/><span>in your hands.</span></h1>
       <p className="sim-lead">This page shows the activities you agreed to. You can withdraw an individual choice at any time or end the experiment entirely.</p>
-      <div className="experiment-notice"><article><strong>Separate device permissions</strong><p>Your research consent does not itself grant browser or operating-system access. Any future notification, screen, or camera test must show its own permission prompt and respect the result.</p></article><article><strong>Remote support is not active</strong><p>No remote-control connection is running. A future support study must use a separately installed, visible tool with a clear stop control and a new approval step.</p></article></div>
-      {!loading && <DevicePermissionLab key={items.filter((item) => item.granted && !item.revokedAt).map((item) => item.capability).join("|")} authorized={items.filter((item) => item.granted && !item.revokedAt).map((item) => item.capability)} />}
+      <div className="experiment-notice"><article><strong>Separate device permissions</strong><p>Your research consent does not itself grant browser or operating-system access. Any future notification, screen, or camera test must show its own permission prompt and respect the result.</p></article><article><strong>Remote assist is view-only</strong><p>If you opted in, a researcher may invite you to share one selected screen. You must accept and use the browser screen picker. They cannot control your mouse, keyboard, files, camera, or operating system.</p></article></div>
+      {!loading && <DevicePermissionLab key={items.filter((item) => item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION).map((item) => item.capability).join("|")} authorized={items.filter((item) => item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION).map((item) => item.capability)} />}
+      {!loading && <RemoteAssistParticipant authorized={items.some((item) => item.capability === "REMOTE_SUPPORT" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION)} />}
       <div className="capability-heading"><div><strong>Your consent records</strong><span>Only selected activities are listed.</span></div><span>{items.filter((item) => item.granted && !item.revokedAt).length} active</span></div>
       {loading ? <p className="sim-lead">Loading your consent records…</p> : items.length ? <div className="capability-list">{items.map((item) => <article className="capability-option" key={item.capability}>
         <span className="capability-icon">{item.granted && !item.revokedAt ? <CheckCircle2 size={18}/> : <CircleOff size={18}/>}</span>

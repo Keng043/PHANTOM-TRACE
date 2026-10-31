@@ -250,6 +250,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   campaigns?: Prisma.CampaignListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  supportRooms?: Prisma.SupportRoomListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -264,6 +265,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   campaigns?: Prisma.CampaignOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
+  supportRooms?: Prisma.SupportRoomOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -281,6 +283,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   campaigns?: Prisma.CampaignListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
+  supportRooms?: Prisma.SupportRoomListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -327,6 +330,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  supportRooms?: Prisma.SupportRoomCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -341,6 +345,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  supportRooms?: Prisma.SupportRoomUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -355,6 +360,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  supportRooms?: Prisma.SupportRoomUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -369,6 +375,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  supportRooms?: Prisma.SupportRoomUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -515,6 +522,20 @@ export type UserUpdateOneWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutSupportRoomsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportRoomsInput, Prisma.UserUncheckedCreateWithoutSupportRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportRoomsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSupportRoomsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportRoomsInput, Prisma.UserUncheckedCreateWithoutSupportRoomsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportRoomsInput
+  upsert?: Prisma.UserUpsertWithoutSupportRoomsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportRoomsInput, Prisma.UserUpdateWithoutSupportRoomsInput>, Prisma.UserUncheckedUpdateWithoutSupportRoomsInput>
+}
+
 export type UserCreateWithoutCampaignsInput = {
   id?: string
   email: string
@@ -526,6 +547,7 @@ export type UserCreateWithoutCampaignsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  supportRooms?: Prisma.SupportRoomCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCampaignsInput = {
@@ -539,6 +561,7 @@ export type UserUncheckedCreateWithoutCampaignsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  supportRooms?: Prisma.SupportRoomUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCampaignsInput = {
@@ -568,6 +591,7 @@ export type UserUpdateWithoutCampaignsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  supportRooms?: Prisma.SupportRoomUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCampaignsInput = {
@@ -581,6 +605,7 @@ export type UserUncheckedUpdateWithoutCampaignsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  supportRooms?: Prisma.SupportRoomUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -594,6 +619,7 @@ export type UserCreateWithoutAuditLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  supportRooms?: Prisma.SupportRoomCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -607,6 +633,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  supportRooms?: Prisma.SupportRoomUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -636,6 +663,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  supportRooms?: Prisma.SupportRoomUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -649,6 +677,79 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  supportRooms?: Prisma.SupportRoomUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutSupportRoomsInput = {
+  id?: string
+  email: string
+  name: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  active?: boolean
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaigns?: Prisma.CampaignCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutSupportRoomsInput = {
+  id?: string
+  email: string
+  name: string
+  passwordHash: string
+  role?: $Enums.UserRole
+  active?: boolean
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutSupportRoomsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportRoomsInput, Prisma.UserUncheckedCreateWithoutSupportRoomsInput>
+}
+
+export type UserUpsertWithoutSupportRoomsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupportRoomsInput, Prisma.UserUncheckedUpdateWithoutSupportRoomsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportRoomsInput, Prisma.UserUncheckedCreateWithoutSupportRoomsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupportRoomsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupportRoomsInput, Prisma.UserUncheckedUpdateWithoutSupportRoomsInput>
+}
+
+export type UserUpdateWithoutSupportRoomsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaigns?: Prisma.CampaignUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupportRoomsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
 
@@ -659,11 +760,13 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
 export type UserCountOutputType = {
   campaigns: number
   auditLogs: number
+  supportRooms: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaigns?: boolean | UserCountOutputTypeCountCampaignsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
+  supportRooms?: boolean | UserCountOutputTypeCountSupportRoomsArgs
 }
 
 /**
@@ -690,6 +793,13 @@ export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupportRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportRoomWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -703,6 +813,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   campaigns?: boolean | Prisma.User$campaignsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  supportRooms?: boolean | Prisma.User$supportRoomsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -746,6 +857,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaigns?: boolean | Prisma.User$campaignsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
+  supportRooms?: boolean | Prisma.User$supportRoomsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -756,6 +868,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     campaigns: Prisma.$CampaignPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
+    supportRooms: Prisma.$SupportRoomPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1163,6 +1276,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaigns<T extends Prisma.User$campaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportRooms<T extends Prisma.User$supportRoomsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1639,6 +1753,30 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.AuditLogScalarFieldEnum | Prisma.AuditLogScalarFieldEnum[]
+}
+
+/**
+ * User.supportRooms
+ */
+export type User$supportRoomsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportRoom
+   */
+  select?: Prisma.SupportRoomSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportRoom
+   */
+  omit?: Prisma.SupportRoomOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportRoomInclude<ExtArgs> | null
+  where?: Prisma.SupportRoomWhereInput
+  orderBy?: Prisma.SupportRoomOrderByWithRelationInput | Prisma.SupportRoomOrderByWithRelationInput[]
+  cursor?: Prisma.SupportRoomWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportRoomScalarFieldEnum | Prisma.SupportRoomScalarFieldEnum[]
 }
 
 /**

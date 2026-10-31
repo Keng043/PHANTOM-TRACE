@@ -60,6 +60,8 @@ export const ModelName = {
   Report: 'Report',
   AuditLog: 'AuditLog',
   ConsentRecord: 'ConsentRecord',
+  SupportRoom: 'SupportRoom',
+  SupportSignal: 'SupportSignal',
   CapabilityConsent: 'CapabilityConsent'
 } as const
 
@@ -204,6 +206,32 @@ export const ConsentRecordScalarFieldEnum = {
 export type ConsentRecordScalarFieldEnum = (typeof ConsentRecordScalarFieldEnum)[keyof typeof ConsentRecordScalarFieldEnum]
 
 
+export const SupportRoomScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  createdById: 'createdById',
+  status: 'status',
+  createdAt: 'createdAt',
+  approvedAt: 'approvedAt',
+  closedAt: 'closedAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type SupportRoomScalarFieldEnum = (typeof SupportRoomScalarFieldEnum)[keyof typeof SupportRoomScalarFieldEnum]
+
+
+export const SupportSignalScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  sender: 'sender',
+  kind: 'kind',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type SupportSignalScalarFieldEnum = (typeof SupportSignalScalarFieldEnum)[keyof typeof SupportSignalScalarFieldEnum]
+
+
 export const CapabilityConsentScalarFieldEnum = {
   id: 'id',
   sessionId: 'sessionId',
@@ -233,6 +261,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

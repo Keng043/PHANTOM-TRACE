@@ -2,6 +2,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { hasValidOrigin } from "@/lib/security/request";
+import { POLICY_VERSION } from "@/lib/security/consent";
 import { hashSessionSecret, SESSION_COOKIE } from "@/lib/simulation/session";
 import { EVENT_WINDOW_LIMIT, EVENT_WINDOW_MS, SESSION_EVENT_LIMIT } from "@/lib/simulation/tracking";
 import { DevicePermissionResultSchema } from "@/lib/validation/device-permission";
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
       const session = await tx.session.findFirst({
         where: {
           sessionToken: hashSessionSecret(secret), consentedAt: { not: null }, endedAt: null, expiresAt: { gt: now },
-          capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null } },
+          capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
         },
         select: { id: true, eventWindowStartedAt: true },
       });
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
         where: {
           id: session.id, endedAt: null, expiresAt: { gt: now }, eventCount: { lt: SESSION_EVENT_LIMIT },
           ...(windowExpired ? {} : { eventWindowStartedAt: { gt: cutoff }, eventWindowCount: { lt: EVENT_WINDOW_LIMIT } }),
-          capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null } },
+          capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
         },
         data: {
           eventCount: { increment: 1 },

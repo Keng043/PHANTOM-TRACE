@@ -406,6 +406,8 @@ export const ModelName = {
   Report: 'Report',
   AuditLog: 'AuditLog',
   ConsentRecord: 'ConsentRecord',
+  SupportRoom: 'SupportRoom',
+  SupportSignal: 'SupportSignal',
   CapabilityConsent: 'CapabilityConsent'
 } as const
 
@@ -422,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "campaign" | "participant" | "session" | "event" | "deviceProfile" | "report" | "auditLog" | "consentRecord" | "capabilityConsent"
+    modelProps: "user" | "campaign" | "participant" | "session" | "event" | "deviceProfile" | "report" | "auditLog" | "consentRecord" | "supportRoom" | "supportSignal" | "capabilityConsent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1092,6 +1094,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SupportRoom: {
+      payload: Prisma.$SupportRoomPayload<ExtArgs>
+      fields: Prisma.SupportRoomFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SupportRoomFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SupportRoomFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        findFirst: {
+          args: Prisma.SupportRoomFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SupportRoomFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        findMany: {
+          args: Prisma.SupportRoomFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>[]
+        }
+        create: {
+          args: Prisma.SupportRoomCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        createMany: {
+          args: Prisma.SupportRoomCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SupportRoomCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>[]
+        }
+        delete: {
+          args: Prisma.SupportRoomDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        update: {
+          args: Prisma.SupportRoomUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        deleteMany: {
+          args: Prisma.SupportRoomDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SupportRoomUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SupportRoomUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>[]
+        }
+        upsert: {
+          args: Prisma.SupportRoomUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportRoomPayload>
+        }
+        aggregate: {
+          args: Prisma.SupportRoomAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSupportRoom>
+        }
+        groupBy: {
+          args: Prisma.SupportRoomGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupportRoomGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SupportRoomCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupportRoomCountAggregateOutputType> | number
+        }
+      }
+    }
+    SupportSignal: {
+      payload: Prisma.$SupportSignalPayload<ExtArgs>
+      fields: Prisma.SupportSignalFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SupportSignalFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SupportSignalFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        findFirst: {
+          args: Prisma.SupportSignalFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SupportSignalFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        findMany: {
+          args: Prisma.SupportSignalFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>[]
+        }
+        create: {
+          args: Prisma.SupportSignalCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        createMany: {
+          args: Prisma.SupportSignalCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SupportSignalCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>[]
+        }
+        delete: {
+          args: Prisma.SupportSignalDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        update: {
+          args: Prisma.SupportSignalUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        deleteMany: {
+          args: Prisma.SupportSignalDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SupportSignalUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SupportSignalUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>[]
+        }
+        upsert: {
+          args: Prisma.SupportSignalUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupportSignalPayload>
+        }
+        aggregate: {
+          args: Prisma.SupportSignalAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSupportSignal>
+        }
+        groupBy: {
+          args: Prisma.SupportSignalGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupportSignalGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SupportSignalCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupportSignalCountAggregateOutputType> | number
+        }
+      }
+    }
     CapabilityConsent: {
       payload: Prisma.$CapabilityConsentPayload<ExtArgs>
       fields: Prisma.CapabilityConsentFieldRefs
@@ -1330,6 +1480,32 @@ export const ConsentRecordScalarFieldEnum = {
 export type ConsentRecordScalarFieldEnum = (typeof ConsentRecordScalarFieldEnum)[keyof typeof ConsentRecordScalarFieldEnum]
 
 
+export const SupportRoomScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  createdById: 'createdById',
+  status: 'status',
+  createdAt: 'createdAt',
+  approvedAt: 'approvedAt',
+  closedAt: 'closedAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type SupportRoomScalarFieldEnum = (typeof SupportRoomScalarFieldEnum)[keyof typeof SupportRoomScalarFieldEnum]
+
+
+export const SupportSignalScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  sender: 'sender',
+  kind: 'kind',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type SupportSignalScalarFieldEnum = (typeof SupportSignalScalarFieldEnum)[keyof typeof SupportSignalScalarFieldEnum]
+
+
 export const CapabilityConsentScalarFieldEnum = {
   id: 'id',
   sessionId: 'sessionId',
@@ -1359,6 +1535,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1508,6 +1691,48 @@ export type EnumReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'ReportStatus[]'
  */
 export type ListEnumReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'SupportRoomStatus'
+ */
+export type EnumSupportRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportRoomStatus'>
+
+
+
+/**
+ * Reference to a field of type 'SupportRoomStatus[]'
+ */
+export type ListEnumSupportRoomStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportRoomStatus[]'>
+
+
+
+/**
+ * Reference to a field of type 'SupportSignalSender'
+ */
+export type EnumSupportSignalSenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportSignalSender'>
+
+
+
+/**
+ * Reference to a field of type 'SupportSignalSender[]'
+ */
+export type ListEnumSupportSignalSenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportSignalSender[]'>
+
+
+
+/**
+ * Reference to a field of type 'SupportSignalKind'
+ */
+export type EnumSupportSignalKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportSignalKind'>
+
+
+
+/**
+ * Reference to a field of type 'SupportSignalKind[]'
+ */
+export type ListEnumSupportSignalKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportSignalKind[]'>
 
 
 
@@ -1698,6 +1923,8 @@ export type GlobalOmitConfig = {
   report?: Prisma.ReportOmit
   auditLog?: Prisma.AuditLogOmit
   consentRecord?: Prisma.ConsentRecordOmit
+  supportRoom?: Prisma.SupportRoomOmit
+  supportSignal?: Prisma.SupportSignalOmit
   capabilityConsent?: Prisma.CapabilityConsentOmit
 }
 

@@ -105,7 +105,7 @@ npm.cmd run build
 - Overall research consent and each optional capability are separate. No optional capability is required to enter the lab.
 - Research consent does not grant browser/OS permission. Phase 7 requests native Notification, Screen Sharing, and Camera permission only after a participant click.
 - Screen and camera streams are previewed locally only; no media, audio, file, or personal content is uploaded or persisted. Media tracks stop when the participant stops, withdraws consent, or leaves the page.
-- Remote Support Study records interest only; no agent, connection, or remote control is enabled.
+- Remote Support consent is separate from screen sharing. Phase 9 adds a 15-minute, participant-approved, view-only WebRTC session; no remote input/control is available.
 - Details: `docs/phase-6-experiment-consent.md`.
 
 ## Safety boundaries
@@ -114,7 +114,7 @@ npm.cmd run build
 - Demo forms must not request or persist real passwords, OTPs, or payment details.
 - Use pseudonymous participant IDs; keep identity mapping separate and access-controlled.
 - Collect only coarse browser/device metadata needed for the training objective.
-- No camera or microphone media upload/storage, GPS collection, canvas fingerprinting, full IP logging, or covert tracking. Camera and screen previews in Phase 7 remain local to the participant's browser.
+- No camera or microphone media upload/storage, GPS collection, canvas fingerprinting, full IP logging, or covert tracking. Phase 7 camera/screen previews remain local; Phase 9 screen video is shared peer-to-peer only after participant approval and browser screen selection.
 - Restrict campaigns to authorized participants and approved lab domains.
 - Enforce role-based access, audit sensitive actions, and define retention/deletion windows.
 
@@ -128,6 +128,6 @@ npm.cmd run build
 - Phase 6 — Experiment & Consent Engine: implemented locally; granular opt-in, per-capability withdrawal, session control panel, and Prisma migration applied.
 - Phase 7 — Device Permission Modules: implemented locally; native Notification, Screen Sharing, and Camera prompts, local-only media previews, visible stop controls, and consent-gated permission telemetry. See `docs/phase-7-device-permissions.md`.
 - Phase 8 — Interaction Tracking: implemented locally; current-version consent-gated signals, coarse response-time bands, idle/return and scroll milestones, strict API allow-listing, and aggregate dashboard analytics. See `docs/phase-8-interaction-tracking.md`.
-- Phase 9 — Remote Support Lab: planned; separately installed, visible, and independently approved only.
-- Phase 10 — Experiment Analytics: planned.
+- Phase 9 — Remote Support Lab: implemented locally; researcher invitation, current-version consent check, participant approval, native screen picker, WebRTC view-only stream, 15-minute expiry, stop/withdraw handling, and short-lived signaling cleanup. No remote keyboard/mouse control. See docs/phase-9-remote-assist.md.
+- Phase 10 — Experiment Analytics: implemented locally; aggregate per-capability consent and permission outcomes, Remote Assist lifecycle counts, and a new analytics panel with a 24-hour reporting window. No media or personal content is collected. See `docs/phase-10-experiment-analytics.md`.
 - Phase 11 — Security Review & Deployment Readiness: planned.

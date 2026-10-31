@@ -17,7 +17,12 @@ type Data = {
   behaviorSampleSize: number;
   interactionSignals: Record<string, number>;
   interactionSignalSampleSize: number;
-  activeSessions: { id: string; campaign: string; startedAt: string; lastSeenAt: string; eventCount: number }[];
+  experiment: {
+    capabilities: Record<string, { consented: number; active: number; withdrawn: number; outcomes: Record<string, number> }>;
+    remote: { invitations: number; approved: number; pending: number; active: number; closed: number; expired: number };
+  };
+  experimentWindow: { since: string; until: string };
+  activeSessions: { id: string; sessionId: string; canRemoteSupport: boolean; campaign: string; startedAt: string; lastSeenAt: string; eventCount: number }[];
   recentEvents: { id: string; type: string; path: string | null; choice: string | null; campaign: string; createdAt: string }[];
 };
 
@@ -95,7 +100,7 @@ export default function DashboardClient({ user }: { user: { id: string; name: st
             <div className="chart-axis"><span>24h ago</span><span>18h</span><span>12h</span><span>6h</span><span>NOW</span></div>
           </section>
           <section className="panel live-panel" id="sessions"><div className="panel-heading"><div><h2>Live sessions</h2><p>Recently active, consented sessions</p></div><span className="live-label"><i/> LIVE</span></div>
-            {data?.activeSessions.length ? <div className="session-list">{data.activeSessions.map((s) => <div className="session-row" key={s.id}><div className="session-indicator"/><div className="session-info"><strong>SESSION · {s.id}</strong><span>{s.campaign}</span><small>Started {stamp(s.startedAt)}</small></div><div className="session-count">{s.eventCount}<small>events</small></div></div>)}</div> : <div className="empty-state"><div className="empty-ring"><Radio size={21}/></div><strong>{data ? "No active sessions" : "Loading sessions"}</strong><span>Sessions appear while a participant is active in a simulation.</span></div>}
+            {data?.activeSessions.length ? <div className="session-list">{data.activeSessions.map((s) => <div className="session-row" key={s.id}><div className="session-indicator"/><div className="session-info"><strong>SESSION · {s.id}</strong><span>{s.campaign}</span><small>Started {stamp(s.startedAt)}</small></div><div className="session-count">{s.eventCount}<small>events</small></div>{s.canRemoteSupport && <button className="support-invite-button" onClick={async () => { try { const response = await fetch("/api/support/rooms", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sessionId: s.sessionId }) }); const result = await response.json(); if (!response.ok) throw new Error(result.error ?? "Unable to create invitation."); router.push(`/support/${result.room.id}`); } catch (e) { setError(e instanceof Error ? e.message : "Unable to create invitation."); } }}>Invite to remote assist</button>}</div>)}</div> : <div className="empty-state"><div className="empty-ring"><Radio size={21}/></div><strong>{data ? "No active sessions" : "Loading sessions"}</strong><span>Sessions appear while a participant is active in a simulation.</span></div>}
             <div className="panel-bottom"><span>ACTIVE = HEARTBEAT ≤ 90 SEC</span><span>8 SEC POLLING <i/></span></div>
           </section>
         </div>
@@ -111,6 +116,45 @@ export default function DashboardClient({ user }: { user: { id: string; name: st
             <p className="analytics-note">Training indicators only. Aggregate counts are not individual risk scores or employee rankings. Only participants who opted into interaction tracking contribute signals.</p>
           </section>
         </div>
+        <section className="panel experiment-analytics-panel" id="experiment-analytics">
+          <div className="panel-heading"><div><h2>Experiment capability analytics</h2><p>Consent and device permission outcomes · last 24 hours</p></div><span className="live-label"><i/> DATABASE</span></div>
+          <div className="capability-analytics-grid">
+            {[
+              { id: "NOTIFICATION", label: "Notifications" },
+              { id: "SCREEN_SHARING", label: "Screen sharing" },
+              { id: "INTERACTION_TRACKING", label: "Interaction signals" },
+              { id: "REMOTE_SUPPORT", label: "Remote assist" },
+              { id: "CAMERA", label: "Camera" },
+            ].map((item) => {
+              const stats = data?.experiment.capabilities[item.id];
+              const outcomes = stats?.outcomes;
+              return <article className="capability-analytics-card" key={item.id}>
+                <div className="capability-analytics-title"><strong>{item.label}</strong><span>{fmt(stats?.consented ?? 0)} consented</span></div>
+                <div className="capability-analytics-metrics">
+                  <div><strong>{fmt(stats?.active ?? 0)}</strong><small>Active consent</small></div>
+                  <div><strong>{fmt(stats?.withdrawn ?? 0)}</strong><small>Withdrawn</small></div>
+                </div>
+                <div className="capability-outcomes">
+                  <span>Granted <b>{fmt(outcomes?.GRANTED ?? 0)}</b></span>
+                  <span>Denied <b>{fmt(outcomes?.DENIED ?? 0)}</b></span>
+                  <span>Stopped <b>{fmt(outcomes?.STOPPED ?? 0)}</b></span>
+                  <span>Unavailable <b>{fmt(outcomes?.UNAVAILABLE ?? 0)}</b></span>
+                </div>
+              </article>;
+            })}
+          </div>
+          <div className="remote-analytics">
+            <div><strong>Remote assist sessions</strong><span>{fmt(data?.experiment.remote.invitations ?? 0)} invitations created</span></div>
+            <div className="remote-analytics-stats">
+              <span>Approved <b>{fmt(data?.experiment.remote.approved ?? 0)}</b></span>
+              <span>Pending <b>{fmt(data?.experiment.remote.pending ?? 0)}</b></span>
+              <span>Active <b>{fmt(data?.experiment.remote.active ?? 0)}</b></span>
+              <span>Closed <b>{fmt(data?.experiment.remote.closed ?? 0)}</b></span>
+              <span>Expired <b>{fmt(data?.experiment.remote.expired ?? 0)}</b></span>
+            </div>
+          </div>
+          <p className="analytics-note">Counts are aggregated across sessions created in the last 24 hours. Permission outcomes are separate from research consent. Screen and camera media are not included in analytics.</p>
+        </section>
         <div className="insight-strip">
           <div><strong>Session completion</strong><span>{data ? `${data.metrics.completionRate}%` : "—"} ended sessions / all created sessions</span></div>
           <div><strong>Reports submitted</strong><span>{data ? fmt(data.metrics.reports) : "—"} report records</span></div>

@@ -63,6 +63,16 @@ export type AuditLog = Prisma.AuditLogModel
  */
 export type ConsentRecord = Prisma.ConsentRecordModel
 /**
+ * Model SupportRoom
+ *
+ */
+export type SupportRoom = Prisma.SupportRoomModel
+/**
+ * Model SupportSignal
+ *
+ */
+export type SupportSignal = Prisma.SupportSignalModel
+/**
  * Model CapabilityConsent
  *
  */

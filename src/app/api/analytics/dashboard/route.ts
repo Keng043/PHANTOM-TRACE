@@ -1,6 +1,8 @@
 import { connection, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
+import { POLICY_VERSION } from "@/lib/security/consent";
+import { buildExperimentAnalytics } from "@/lib/analytics/experiment";
 
 const headers = { "Cache-Control": "no-store" };
 
@@ -15,6 +17,7 @@ export async function GET() {
   const [
     campaigns, participantIds, sessions, activeSessionsCount, events, reports,
     endedSessions, recentEvents, activeSessions, hourlyEvents, decisions, interactionEvents,
+    consentRows, permissionResults, supportRooms,
   ] = await Promise.all([
     prisma.campaign.count(),
     prisma.session.groupBy({ by: ["participantId"] }),
@@ -30,7 +33,8 @@ export async function GET() {
     prisma.session.findMany({
       where: { endedAt: null, expiresAt: { gt: now }, lastSeenAt: { gte: activeSince } },
       take: 12, orderBy: { lastSeenAt: "desc" },
-      select: { id: true, startedAt: true, lastSeenAt: true, eventCount: true, campaign: { select: { name: true } } },
+      select: { id: true, startedAt: true, lastSeenAt: true, eventCount: true, campaign: { select: { name: true } }, capabilityConsents: { where: { capability: "REMOTE_SUPPORT", granted: true, revokedAt: null, policyVersion: POLICY_VERSION }, select: { id: true }, take: 1 } },
+
     }),
     prisma.event.findMany({ where: { createdAt: { gte: since } }, select: { createdAt: true } }),
     prisma.event.findMany({
@@ -40,6 +44,18 @@ export async function GET() {
     prisma.event.findMany({
       where: { createdAt: { gte: since }, type: "INTERACTION_SIGNAL" },
       select: { metadata: true }, take: 5000, orderBy: { createdAt: "desc" },
+    }),
+    prisma.capabilityConsent.findMany({
+      where: { policyVersion: POLICY_VERSION, session: { startedAt: { gte: since } } },
+      select: { capability: true, granted: true, grantedAt: true, revokedAt: true },
+      take: 10000,
+    }),
+    prisma.event.findMany({
+      where: { createdAt: { gte: since }, type: "DEVICE_PERMISSION_RESULT" },
+      select: { metadata: true }, take: 5000, orderBy: { createdAt: "desc" },
+    }),
+    prisma.supportRoom.findMany({
+      where: { createdAt: { gte: since } }, select: { status: true, approvedAt: true, expiresAt: true }, take: 5000,
     }),
   ]);
 
@@ -72,6 +88,14 @@ export async function GET() {
     }
   }
 
+  const permissionEvents = permissionResults.flatMap((event) => {
+    const meta = event.metadata && typeof event.metadata === "object" && !Array.isArray(event.metadata)
+      ? event.metadata as Record<string, unknown> : {};
+    return typeof meta.capability === "string" && typeof meta.outcome === "string"
+      ? [{ capability: meta.capability, outcome: meta.outcome }] : [];
+  });
+  const experiment = buildExperimentAnalytics(consentRows, permissionEvents, supportRooms);
+
   return NextResponse.json({
     generatedAt: now.toISOString(),
     metrics: {
@@ -82,8 +106,9 @@ export async function GET() {
     activity: activity.map(({ hour, count }) => ({ hour, count })),
     behavior, behaviorSampleSize: decisions.length,
     interactionSignals, interactionSignalSampleSize: interactionEvents.length,
+    experiment, experimentWindow: { since: since.toISOString(), until: now.toISOString() },
     activeSessions: activeSessions.map((s) => ({
-      id: s.id.slice(-8).toUpperCase(), campaign: s.campaign.name,
+      id: s.id.slice(-8).toUpperCase(), sessionId: s.id, canRemoteSupport: s.capabilityConsents.length > 0, campaign: s.campaign.name,
       startedAt: s.startedAt.toISOString(), lastSeenAt: s.lastSeenAt.toISOString(), eventCount: s.eventCount,
     })),
     recentEvents: recentEvents.map((e) => {

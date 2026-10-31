@@ -20,9 +20,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "The experiment session is not active." }, { status: 401 });
   }
 
-  const result = await prisma.capabilityConsent.updateMany({
-    where: { sessionId: session.id, capability: parsed.data.capability, granted: true, revokedAt: null },
-    data: { granted: false, revokedAt: now },
+  const result = await prisma.$transaction(async (tx) => {
+    const revoked = await tx.capabilityConsent.updateMany({
+      where: { sessionId: session.id, capability: parsed.data.capability, granted: true, revokedAt: null },
+      data: { granted: false, revokedAt: now },
+    });
+    if (parsed.data.capability === "REMOTE_SUPPORT") {
+      const rooms = await tx.supportRoom.findMany({ where: { sessionId: session.id, status: { in: ["PENDING", "ACTIVE"] } }, select: { id: true } });
+      await tx.supportRoom.updateMany({ where: { sessionId: session.id, status: { in: ["PENDING", "ACTIVE"] } }, data: { status: "CLOSED", closedAt: now } });
+      if (rooms.length) await tx.supportSignal.deleteMany({ where: { roomId: { in: rooms.map((room) => room.id) } } });
+    }
+    return revoked;
   });
   return NextResponse.json({ ok: true, revoked: result.count > 0 }, {
     headers: { "Cache-Control": "no-store" },

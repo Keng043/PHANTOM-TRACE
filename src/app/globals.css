@@ -173,3 +173,27 @@ label.capability-option.selected{border-color:#397d79;background:#102725}
 .permission-footnote{display:flex;align-items:flex-start;gap:7px;margin:13px 0 0;color:#8299ad;font-size:9px;line-height:1.7}
 .permission-footnote svg{flex-shrink:0;margin-top:1px;color:#7bd6c7}
 @media(max-width:720px){.permission-grid{grid-template-columns:1fr}.permission-card>p{min-height:0}}
+
+/* PHASE 10 — experiment capability analytics */
+.experiment-analytics-panel{padding:18px;margin:15px 0}
+.capability-analytics-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-top:15px}
+.capability-analytics-card{min-width:0;padding:12px;border:1px solid #26394d;border-radius:8px;background:#0d1927}
+.capability-analytics-title{display:grid;gap:5px;min-height:35px}
+.capability-analytics-title strong{font-size:10px;color:#dce8f4}
+.capability-analytics-title span{font-size:8px;color:#7f95aa}
+.capability-analytics-metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+.capability-analytics-metrics>div{display:grid;gap:3px;padding:8px;background:#132333;border-radius:5px}
+.capability-analytics-metrics strong{font-size:17px;color:#d9e9f2}
+.capability-analytics-metrics small{font-size:8px;color:#7f95aa}
+.capability-outcomes{display:grid;gap:6px}
+.capability-outcomes span{display:flex;justify-content:space-between;gap:5px;color:#8196aa;font-size:8px}
+.capability-outcomes b{color:#c8d9e5;font-weight:650}
+.remote-analytics{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:13px;padding:13px;border:1px solid #26394d;border-radius:8px;background:#101e2d}
+.remote-analytics>div:first-child{display:grid;gap:4px}
+.remote-analytics>div:first-child strong{font-size:10px;color:#dce8f4}
+.remote-analytics>div:first-child span{font-size:8px;color:#8196aa}
+.remote-analytics-stats{display:flex;flex-wrap:wrap;gap:14px}
+.remote-analytics-stats span{font-size:9px;color:#91a5b8}
+.remote-analytics-stats b{color:#d5e4ee;margin-left:4px}
+@media(max-width:1050px){.capability-analytics-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.capability-analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.remote-analytics{align-items:flex-start;flex-direction:column}.remote-analytics-stats{gap:9px}}

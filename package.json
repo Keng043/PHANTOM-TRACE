@@ -20,7 +20,8 @@
     "interaction:check": "tsx scripts/verify-interaction.ts",
     "db:maintenance": "tsx scripts/maintenance.ts",
     "admin:create": "tsx scripts/create-admin.ts",
-    "auth:check": "tsx scripts/verify-auth.ts"
+    "auth:check": "tsx scripts/verify-auth.ts",
+    "remote-support:check": "tsx scripts/verify-remote-support.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",

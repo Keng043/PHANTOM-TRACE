@@ -49,6 +49,24 @@ enum ExperimentCapability {
   CAMERA
 }
 
+enum SupportRoomStatus {
+  PENDING
+  ACTIVE
+  CLOSED
+  EXPIRED
+}
+
+enum SupportSignalKind {
+  OFFER
+  ANSWER
+  ICE
+}
+
+enum SupportSignalSender {
+  PARTICIPANT
+  STAFF
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String      @unique
@@ -61,6 +79,7 @@ model User {
   updatedAt    DateTime    @updatedAt
   campaigns    Campaign[]  @relation("CampaignCreator")
   auditLogs    AuditLog[]
+  supportRooms SupportRoom[]
 }
 
 model Campaign {
@@ -110,6 +129,7 @@ model Session {
   reports               Report[]
   consentRecords        ConsentRecord[]
   capabilityConsents    CapabilityConsent[]
+  supportRoom           SupportRoom?
   @@index([campaignId, startedAt])
   @@index([participantId, startedAt])
   @@index([expiresAt, endedAt])
@@ -177,6 +197,33 @@ model ConsentRecord {
   session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   @@index([participantId, recordedAt])
   @@index([sessionId, recordedAt])
+}
+
+model SupportRoom {
+  id          String            @id @default(cuid())
+  sessionId   String            @unique
+  createdById String
+  status      SupportRoomStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  approvedAt  DateTime?
+  closedAt    DateTime?
+  expiresAt   DateTime
+  session     Session           @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  createdBy   User              @relation(fields: [createdById], references: [id])
+  signals     SupportSignal[]
+  @@index([status, expiresAt])
+  @@index([createdById, createdAt])
+}
+
+model SupportSignal {
+  id        String              @id @default(cuid())
+  roomId    String
+  sender    SupportSignalSender
+  kind      SupportSignalKind
+  payload   Json
+  createdAt DateTime            @default(now())
+  room      SupportRoom         @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  @@index([roomId, createdAt])
 }
 
 model CapabilityConsent {

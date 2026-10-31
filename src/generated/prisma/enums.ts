@@ -64,3 +64,30 @@ export const ExperimentCapability = {
 } as const
 
 export type ExperimentCapability = (typeof ExperimentCapability)[keyof typeof ExperimentCapability]
+
+
+export const SupportRoomStatus = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type SupportRoomStatus = (typeof SupportRoomStatus)[keyof typeof SupportRoomStatus]
+
+
+export const SupportSignalKind = {
+  OFFER: 'OFFER',
+  ANSWER: 'ANSWER',
+  ICE: 'ICE'
+} as const
+
+export type SupportSignalKind = (typeof SupportSignalKind)[keyof typeof SupportSignalKind]
+
+
+export const SupportSignalSender = {
+  PARTICIPANT: 'PARTICIPANT',
+  STAFF: 'STAFF'
+} as const
+
+export type SupportSignalSender = (typeof SupportSignalSender)[keyof typeof SupportSignalSender]

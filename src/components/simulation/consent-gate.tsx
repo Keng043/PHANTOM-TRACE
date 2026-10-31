@@ -9,7 +9,7 @@ const capabilities = [
   { id: "NOTIFICATION", title: "Notifications", description: "Test whether browser notifications can be displayed and how participants respond.", icon: Bell },
   { id: "SCREEN_SHARING", title: "Screen sharing", description: "Voluntarily share a selected screen or window during a supervised test.", icon: Monitor },
   { id: "INTERACTION_TRACKING", title: "Interaction signals", description: "Record button and choice actions, scroll milestones, tab visibility, idle/return signals and coarse response-time bands — never typed content.", icon: MousePointer2 },
-  { id: "REMOTE_SUPPORT", title: "Remote support study", description: "Register interest in a separately installed, visible support session. This consent does not enable remote control.", icon: Unplug },
+  { id: "REMOTE_SUPPORT", title: "Remote assist (view-only)", description: "Allow a researcher to invite you to share one screen for live viewing. You must accept each invitation and choose the screen; remote control is not available.", icon: Unplug },
   { id: "CAMERA", title: "Camera access study", description: "Test a camera permission request. No photo or video is recorded in this phase.", icon: Camera },
 ] as const;
 
@@ -53,7 +53,7 @@ export function ConsentGate() {
       <div className="experiment-notice">
         <article><strong>What the lab records</strong><p>A random participant code, session timestamps, selected consent choices, and permission outcomes. If you separately opt into Interaction signals, the lab records button/choice actions, page-scroll milestones, tab visibility, idle/return events, and coarse response-time bands — never typed text or field values.</p></article>
         <article><strong>What the lab does not collect</strong><p>Passwords, OTPs, typed text, personal files, full IP addresses, precise location, or hidden device fingerprints. Camera and screen content are not recorded by this consent workflow.</p></article>
-        <article><strong>Important distinction</strong><p>Choosing an activity below records your research consent only. Browser or operating-system permissions are requested separately at the time of use. Remote support is not enabled by this page and requires a separate, visible, user-approved session.</p></article>
+        <article><strong>Important distinction</strong><p>Choosing an activity below records research consent only. Screen sharing still requires a separate invitation, your approval, and the browser screen picker. Researchers can view the selected screen but cannot control your mouse, keyboard, files, camera, or operating system. You can stop sharing at any time. Temporary connection setup messages may include network-address metadata and are deleted when the session ends.</p></article>
       </div>
 
       <div className="capability-heading"><div><strong>Choose experiment activities</strong><span>Every item is optional. You can change your mind.</span></div><span>{selected.length} / {capabilities.length}</span></div>
