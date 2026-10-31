@@ -36,7 +36,7 @@ The server verifies same-origin, the existing HttpOnly session cookie, active se
 - Microphone/audio capture is never requested.
 - There is no remote desktop, remote shell, input injection, background agent, or unattended access.
 - Remote Support Study remains a consent/interest record only and is not activated by these modules.
-- Interaction tracking beyond the permission outcome is deferred to Phase 8.
+- Interaction tracking is implemented separately in Phase 8 and requires its own current-version consent.
 
 ## Migration
 

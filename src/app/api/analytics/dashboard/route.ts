@@ -14,7 +14,7 @@ export async function GET() {
   const activeSince = new Date(now.getTime() - 90_000);
   const [
     campaigns, participantIds, sessions, activeSessionsCount, events, reports,
-    endedSessions, recentEvents, activeSessions, hourlyEvents, decisions,
+    endedSessions, recentEvents, activeSessions, hourlyEvents, decisions, interactionEvents,
   ] = await Promise.all([
     prisma.campaign.count(),
     prisma.session.groupBy({ by: ["participantId"] }),
@@ -37,6 +37,10 @@ export async function GET() {
       where: { createdAt: { gte: since }, type: { in: ["DEMO_FORM_SUBMITTED", "REPORT_SUBMITTED"] } },
       select: { type: true, metadata: true }, take: 5000, orderBy: { createdAt: "desc" },
     }),
+    prisma.event.findMany({
+      where: { createdAt: { gte: since }, type: "INTERACTION_SIGNAL" },
+      select: { metadata: true }, take: 5000, orderBy: { createdAt: "desc" },
+    }),
   ]);
 
   const activity = Array.from({ length: 24 }, (_, i) => {
@@ -58,6 +62,16 @@ export async function GET() {
     else if (event.type === "REPORT_SUBMITTED") behavior.report++;
   }
 
+  const interactionSignals: Record<string, number> = {};
+  for (const event of interactionEvents) {
+    const meta = event.metadata && typeof event.metadata === "object" && !Array.isArray(event.metadata)
+      ? event.metadata as Record<string, unknown> : {};
+    const signal = meta.signal;
+    if (typeof signal === "string" && /^[A-Z0-9_]{1,32}$/.test(signal)) {
+      interactionSignals[signal] = (interactionSignals[signal] ?? 0) + 1;
+    }
+  }
+
   return NextResponse.json({
     generatedAt: now.toISOString(),
     metrics: {
@@ -67,6 +81,7 @@ export async function GET() {
     },
     activity: activity.map(({ hour, count }) => ({ hour, count })),
     behavior, behaviorSampleSize: decisions.length,
+    interactionSignals, interactionSignalSampleSize: interactionEvents.length,
     activeSessions: activeSessions.map((s) => ({
       id: s.id.slice(-8).toUpperCase(), campaign: s.campaign.name,
       startedAt: s.startedAt.toISOString(), lastSeenAt: s.lastSeenAt.toISOString(), eventCount: s.eventCount,
@@ -75,9 +90,11 @@ export async function GET() {
       const meta = e.metadata && typeof e.metadata === "object" && !Array.isArray(e.metadata)
         ? e.metadata as Record<string, unknown> : {};
       const choice = meta.interactionType;
+      const signal = meta.signal;
       return {
         id: e.id, type: e.type, path: e.path,
-        choice: choice === "verify" || choice === "report" || choice === "continue" ? choice : null,
+        choice: choice === "verify" || choice === "report" || choice === "continue" ? choice
+          : typeof signal === "string" && /^[A-Z0-9_]{1,32}$/.test(signal) ? signal.replaceAll("_", " ") : null,
         campaign: e.session.campaign.name, createdAt: e.createdAt.toISOString(),
       };
     }),

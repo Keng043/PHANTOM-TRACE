@@ -15,6 +15,8 @@ type Data = {
   activity: { hour: string; count: number }[];
   behavior: { verify: number; report: number; continue: number };
   behaviorSampleSize: number;
+  interactionSignals: Record<string, number>;
+  interactionSignalSampleSize: number;
   activeSessions: { id: string; campaign: string; startedAt: string; lastSeenAt: string; eventCount: number }[];
   recentEvents: { id: string; type: string; path: string | null; choice: string | null; campaign: string; createdAt: string }[];
 };
@@ -104,7 +106,9 @@ export default function DashboardClient({ user }: { user: { id: string; name: st
           <section className="panel campaign-panel" id="behavior"><div className="panel-heading"><div><h2>Behavior signals</h2><p>Aggregate choices · last 24 hours</p></div><ShieldAlert size={16} color="#d6ad75"/></div>
             <div className="behavior-summary"><strong>{data ? fmt(data.behaviorSampleSize) : "—"}</strong><span>decision events sampled</span></div>
             {behavior.map((item) => <div className="behavior-row" key={item.id}><div><span>{item.label}</span><strong>{fmt(item.count)}</strong></div><div className="behavior-track"><i style={{ width: `${data?.behaviorSampleSize ? item.count / data.behaviorSampleSize * 100 : 0}%`, background: item.color }}/></div></div>)}
-            <p className="analytics-note">Training indicators only. Aggregate counts are not individual risk scores or employee rankings.</p>
+            <div className="interaction-summary"><strong>{data ? fmt(data.interactionSignalSampleSize) : "—"}</strong><span>consented interaction signals · last 24 hours</span></div>
+            <div className="interaction-signal-list">{["DECISION_CHANGE", "DECISION_SUBMIT", "LINK_CLICK", "SCROLL_25", "SCROLL_50", "SCROLL_75", "SCROLL_100", "TAB_HIDDEN", "TAB_VISIBLE", "IDLE_30S", "RETURNED"].map((signal) => <div key={signal}><span>{signal.replaceAll("_", " ")}</span><strong>{data ? fmt(data.interactionSignals?.[signal] ?? 0) : "—"}</strong></div>)}</div>
+            <p className="analytics-note">Training indicators only. Aggregate counts are not individual risk scores or employee rankings. Only participants who opted into interaction tracking contribute signals.</p>
           </section>
         </div>
         <div className="insight-strip">

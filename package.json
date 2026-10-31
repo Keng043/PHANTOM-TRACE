@@ -17,6 +17,7 @@
     "db:seed": "tsx scripts/seed-lab.ts",
     "simulation:check": "tsx scripts/verify-simulation.ts",
     "permissions:check": "tsx scripts/verify-device-permissions.ts",
+    "interaction:check": "tsx scripts/verify-interaction.ts",
     "db:maintenance": "tsx scripts/maintenance.ts",
     "admin:create": "tsx scripts/create-admin.ts",
     "auth:check": "tsx scripts/verify-auth.ts"

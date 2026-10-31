@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertTriangle, ArrowRight, Fingerprint, LockKeyhole, MailWarning, ShieldCheck } from "lucide-react";
+import { InteractionTracker } from "@/components/simulation/interaction-tracker";
+import { POLICY_VERSION } from "@/lib/security/consent";
 
 async function recordEvent(type: string, path: string, interactionType?: string) {
   const response = await fetch("/api/simulation/event", {
@@ -13,7 +15,9 @@ async function recordEvent(type: string, path: string, interactionType?: string)
   });
   if (!response.ok) throw new Error(response.status === 429
     ? "Too many actions in a short time. Please wait and try again."
-    : "Your session has expired. Return to the consent page to begin again.");
+    : response.status === 403
+      ? "Interaction tracking consent is no longer active. Your choice was not stored."
+      : "Your session has expired. Return to the consent page to begin again.");
 }
 
 function collectCoarseDeviceProfile() {
@@ -74,11 +78,22 @@ export function SimulationClient() {
     if (busy || completed) return;
     setBusy(true); setMessage("");
     try {
-      await recordEvent(decision === "report" ? "REPORT_SUBMITTED" : "DEMO_FORM_SUBMITTED", "/simulation/demo", decision);
+      const consentResponse = await fetch("/api/simulation/consent", { cache: "no-store" });
+      if (!consentResponse.ok) throw new Error(consentResponse.status === 401
+        ? "Your session has expired. Return to the consent page to begin again."
+        : "Unable to verify your interaction consent. Please try again.");
+      const consent = await consentResponse.json();
+      const interactionAllowed = consent?.capabilities?.some((item: { capability: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
+        item.capability === "INTERACTION_TRACKING" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+      if (interactionAllowed) {
+        await recordEvent(decision === "report" ? "REPORT_SUBMITTED" : "DEMO_FORM_SUBMITTED", "/simulation/demo", decision);
+      }
       setCompleted(true);
-      setMessage(decision === "report"
-        ? "Report action recorded. Good instinct — verify the sender before interacting."
-        : "Your choice has been recorded. Continue to the learning review.");
+      setMessage(interactionAllowed
+        ? decision === "report"
+          ? "Report action recorded. Good instinct — verify the sender before interacting."
+          : "Your choice has been recorded. Continue to the learning review."
+        : "Your choice stays in this page and was not stored because Interaction signals was not selected.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Unable to record this action."); }
     finally { setBusy(false); }
   }
@@ -93,7 +108,7 @@ export function SimulationClient() {
     } catch { setMessage("Could not close the session. Please try again."); setBusy(false); }
   }
 
-  return <main className="sim-page"><div className="sim-shell sim-wide">
+  return <main className="sim-page"><InteractionTracker/><div className="sim-shell sim-wide">
     <header className="sim-brand"><span className="sim-brand-mark"><Fingerprint size={22}/></span><span>PHANTOM <b>TRACE</b><small>SECURITY AWARENESS LAB</small></span><span className="sim-lab-pill"><i/> CONSENTED SESSION</span></header>
     <div className="sim-progress"><span>SIMULATION</span><i/><span>01 / 02</span></div>
     <section className="simulation-layout">
@@ -102,14 +117,14 @@ export function SimulationClient() {
         <h1>A message deserves<br/><span>a second look.</span></h1>
         <p className="sim-lead">Review the sample notice on the right. Decide what you would do in a real situation. This is a fictional lab scenario, not a real service.</p>
         <div className="scenario-hint"><ShieldCheck size={18}/><p><strong>Stay curious, not rushed.</strong><br/>Urgency, unexpected requests, and unfamiliar destinations are worth checking.</p></div>
-        <fieldset className="decision-fieldset" disabled={busy || completed}>
+        <fieldset className="decision-fieldset" data-pt-track="decision-choice" disabled={busy || completed}>
           <legend>What would you do next?</legend>
           <label><input type="radio" name="decision" value="verify" checked={decision === "verify"} onChange={() => setDecision("verify")}/><span>Verify the request through a trusted channel</span></label>
           <label><input type="radio" name="decision" value="continue" checked={decision === "continue"} onChange={() => setDecision("continue")}/><span>Continue without checking the sender</span></label>
           <label><input type="radio" name="decision" value="report" checked={decision === "report"} onChange={() => setDecision("report")}/><span>Report the message as suspicious</span></label>
         </fieldset>
         <div className="sim-action-stack">
-          <button className="sim-primary" disabled={busy || completed} onClick={submitDecision}>{completed ? "Choice recorded" : busy ? "Recording…" : "Submit my choice"} <ArrowRight size={16}/></button>
+          <button className="sim-primary" data-pt-track="decision-submit" disabled={busy || completed} onClick={submitDecision}>{completed ? "Choice recorded" : busy ? "Recording…" : "Submit my choice"} <ArrowRight size={16}/></button>
         </div>
         {message && <p className="sim-feedback" role="status">{message}</p>}
         {completed && <button className="sim-primary sim-finish" onClick={finish}>Finish and review lessons <ArrowRight size={16}/></button>}

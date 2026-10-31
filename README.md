@@ -61,7 +61,7 @@ The local PostgreSQL server binds to `127.0.0.1:54329` only. Database credential
 - Active session monitor: sessions with recent activity within 90 seconds.
 - Activity chart: hourly event volume across the previous 24 hours.
 - Event stream: latest 12 records with safe metadata only.
-- Behavior analytics: aggregate verify/report/continue choices; no individual scoring or ranking.
+- Behavior analytics: aggregate verify/report/continue choices and separately consented interaction signals; no individual scoring or ranking.
 - Browser refreshes every 8 seconds (near-live polling, not WebSocket).
 - Analytics endpoint `/api/analytics/dashboard` requires an authenticated active Admin or Researcher account.
 - Phase 5 provides staff authentication, Admin/Researcher RBAC and account provisioning. Phase 11 security review is mandatory before online deployment.
@@ -90,6 +90,7 @@ For an online lab, provision a managed PostgreSQL database with TLS and set `DAT
 npm.cmd test
 npm.cmd run auth:check
 npm.cmd run permissions:check
+npm.cmd run interaction:check
 npm.cmd run lint
 npm.cmd run typecheck
 npm.cmd run build
@@ -126,7 +127,7 @@ npm.cmd run build
 - Phase 5 — Authentication & RBAC: implemented locally. Login, signed session cookie, protected dashboard/API, Admin-only account management and CLI administrator bootstrap. See `docs/phase-5-auth-rbac.md`.
 - Phase 6 — Experiment & Consent Engine: implemented locally; granular opt-in, per-capability withdrawal, session control panel, and Prisma migration applied.
 - Phase 7 — Device Permission Modules: implemented locally; native Notification, Screen Sharing, and Camera prompts, local-only media previews, visible stop controls, and consent-gated permission telemetry. See `docs/phase-7-device-permissions.md`.
-- Phase 8 — Interaction Tracking: planned.
+- Phase 8 — Interaction Tracking: implemented locally; current-version consent-gated signals, coarse response-time bands, idle/return and scroll milestones, strict API allow-listing, and aggregate dashboard analytics. See `docs/phase-8-interaction-tracking.md`.
 - Phase 9 — Remote Support Lab: planned; separately installed, visible, and independently approved only.
 - Phase 10 — Experiment Analytics: planned.
 - Phase 11 — Security Review & Deployment Readiness: planned.

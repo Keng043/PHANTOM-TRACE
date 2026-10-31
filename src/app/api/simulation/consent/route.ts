@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     where: { sessionToken: hashSessionSecret(secret) },
     select: {
       id: true, endedAt: true, expiresAt: true,
-      capabilityConsents: { select: { capability: true, granted: true, grantedAt: true, revokedAt: true }, orderBy: { createdAt: "asc" } },
+      capabilityConsents: { select: { capability: true, granted: true, grantedAt: true, revokedAt: true, policyVersion: true }, orderBy: { createdAt: "asc" } },
     },
   });
   if (!session || session.endedAt || session.expiresAt <= now) {

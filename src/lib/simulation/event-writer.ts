@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma/client";
+import { POLICY_VERSION } from "@/lib/security/consent";
 import { prisma } from "@/lib/db";
 import { EVENT_WINDOW_LIMIT, EVENT_WINDOW_MS, SESSION_EVENT_LIMIT } from "./tracking";
 import type { TrackingEventPayload } from "./types";
@@ -12,6 +13,10 @@ export type TrackingWriteResult =
 export async function writeTrackingEvent(sessionId: string, payload: TrackingEventPayload): Promise<TrackingWriteResult> {
   const now = new Date();
   const cutoff = new Date(now.getTime() - EVENT_WINDOW_MS);
+  const requiresInteractionConsent = ["DEMO_FORM_SUBMITTED", "REPORT_SUBMITTED", "LINK_CLICKED"].includes(payload.type);
+  const interactionConsentFilter = requiresInteractionConsent
+    ? { capabilityConsents: { some: { capability: "INTERACTION_TRACKING" as const, granted: true, revokedAt: null, policyVersion: POLICY_VERSION } } }
+    : {};
   try {
     return await prisma.$transaction(async (tx) => {
       if (payload.clientEventId) {
@@ -20,7 +25,7 @@ export async function writeTrackingEvent(sessionId: string, payload: TrackingEve
       }
 
       const session = await tx.session.findFirst({
-        where: { id: sessionId, consentedAt: { not: null }, endedAt: null, expiresAt: { gt: now } },
+        where: { id: sessionId, consentedAt: { not: null }, endedAt: null, expiresAt: { gt: now }, ...interactionConsentFilter },
         select: { id: true, eventWindowStartedAt: true },
       });
       if (!session) return { status: "inactive" };
@@ -32,6 +37,7 @@ export async function writeTrackingEvent(sessionId: string, payload: TrackingEve
           consentedAt: { not: null },
           endedAt: null,
           expiresAt: { gt: now },
+          ...interactionConsentFilter,
           eventCount: { lt: SESSION_EVENT_LIMIT },
           ...(windowExpired ? {} : { eventWindowStartedAt: { gt: cutoff }, eventWindowCount: { lt: EVENT_WINDOW_LIMIT } }),
         },

@@ -36,7 +36,7 @@ All endpoints use the existing pseudonymous session token hash. The raw session 
 - A research-consent record is not an operating-system or browser permission grant.
 - Notification, screen capture, and camera APIs are not invoked in Phase 6. Their native permission prompts are separate future work in Phase 7.
 - Remote Support selection records interest/consent to participate in a future separately scoped study only. It does not install an agent, create a remote connection, or enable control.
-- Interaction consent does not authorize collecting typed text, passwords, OTPs, or personal content.
+- Interaction consent does not authorize collecting typed text, passwords, OTPs, or personal content. Phase 8 signals are limited to explicitly described choice actions, scroll milestones, tab visibility, coarse idle/return events, and coarse elapsed-time buckets; older policy versions do not authorize the expanded signal set.
 - No camera, microphone, screen, or remote-control content is captured by this phase.
 - A participant may withdraw a selected capability or end the whole session.
 
