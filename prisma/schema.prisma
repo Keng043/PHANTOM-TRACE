@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  RESEARCHER
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum EventType {
+  PAGE_VIEW
+  CONSENT_GRANTED
+  CONSENT_DECLINED
+  DEMO_FORM_SUBMITTED
+  LINK_CLICKED
+  REPORT_SUBMITTED
+  EDUCATION_VIEWED
+  DEVICE_PROFILE_RECORDED
+  SESSION_ENDED
+}
+
+enum ReportStatus {
+  NEW
+  REVIEWED
+  RESOLVED
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String
+  passwordHash String
+  role         UserRole    @default(RESEARCHER)
+  active       Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  campaigns    Campaign[]  @relation("CampaignCreator")
+  auditLogs    AuditLog[]
+}
+
+model Campaign {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  status      CampaignStatus @default(DRAFT)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  createdById String
+  createdBy   User           @relation("CampaignCreator", fields: [createdById], references: [id])
+  sessions    Session[]
+  @@index([status, createdAt])
+}
+
+model Participant {
+  id             String          @id @default(cuid())
+  pseudonym      String          @unique
+  externalRef    String?
+  createdAt      DateTime        @default(now())
+  sessions       Session[]
+  consentRecords ConsentRecord[]
+  @@index([createdAt])
+}
+
+model Session {
+  id                    String         @id @default(cuid())
+  sessionToken          String         @unique
+  campaignId            String
+  participantId         String
+  startedAt             DateTime       @default(now())
+  endedAt               DateTime?
+  consentedAt           DateTime?
+  consentVersion        String?
+  expiresAt             DateTime
+  lastSeenAt            DateTime       @default(now())
+  lastHeartbeatAt       DateTime       @default(now())
+  eventCount            Int            @default(0)
+  eventWindowStartedAt  DateTime       @default(now())
+  eventWindowCount      Int            @default(0)
+  campaign              Campaign       @relation(fields: [campaignId], references: [id])
+  participant           Participant    @relation(fields: [participantId], references: [id])
+  events                Event[]
+  deviceProfile         DeviceProfile?
+  reports               Report[]
+  consentRecords        ConsentRecord[]
+  @@index([campaignId, startedAt])
+  @@index([participantId, startedAt])
+  @@index([expiresAt, endedAt])
+  @@index([lastSeenAt])
+}
+
+model Event {
+  id            String    @id @default(cuid())
+  sessionId     String
+  clientEventId String?   @unique
+  type          EventType
+  path          String?
+  metadata      Json?
+  createdAt     DateTime  @default(now())
+  session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@index([sessionId, createdAt])
+  @@index([type, createdAt])
+}
+
+model DeviceProfile {
+  id            String  @id @default(cuid())
+  sessionId     String  @unique
+  browserFamily String?
+  osFamily      String?
+  deviceType    String?
+  screenClass   String?
+  locale        String?
+  timezone      String?
+  capturedAt    DateTime @default(now())
+  session       Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id        String       @id @default(cuid())
+  sessionId String
+  category  String
+  message   String?
+  status    ReportStatus @default(NEW)
+  createdAt DateTime     @default(now())
+  session   Session      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@index([status, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String
+  targetType String
+  targetId   String?
+  details    Json?
+  createdAt  DateTime @default(now())
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  @@index([createdAt])
+  @@index([actorId, createdAt])
+}
+
+model ConsentRecord {
+  id            String      @id @default(cuid())
+  participantId String
+  sessionId     String
+  policyVersion String
+  granted       Boolean
+  recordedAt    DateTime    @default(now())
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@index([participantId, recordedAt])
+  @@index([sessionId, recordedAt])
+}
