@@ -46,6 +46,7 @@ model User {
   passwordHash String
   role         UserRole    @default(RESEARCHER)
   active       Boolean     @default(true)
+  sessionVersion Int       @default(0)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
   campaigns    Campaign[]  @relation("CampaignCreator")

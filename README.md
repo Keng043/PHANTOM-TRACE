@@ -63,8 +63,8 @@ The local PostgreSQL server binds to `127.0.0.1:54329` only. Database credential
 - Event stream: latest 12 records with safe metadata only.
 - Behavior analytics: aggregate verify/report/continue choices; no individual scoring or ranking.
 - Browser refreshes every 8 seconds (near-live polling, not WebSocket).
-- Analytics endpoint `/api/analytics/dashboard` is development-only and returns 404 outside local development.
-- Phase 5 RBAC and Phase 6 security review are mandatory before online deployment.
+- Analytics endpoint `/api/analytics/dashboard` requires an authenticated active Admin or Researcher account.
+- Phase 5 provides staff authentication, Admin/Researcher RBAC and account provisioning. Phase 6 security review is mandatory before online deployment.
 - Details: `docs/analytics.md`.
 
 ## Database workflow
@@ -74,19 +74,21 @@ npm.cmd run db:validate
 npm.cmd run db:generate
 npx.cmd prisma migrate deploy
 npm.cmd run db:seed
+npm.cmd run admin:create
 npm.cmd run db:check
 npm.cmd run simulation:check
 npm.cmd run db:maintenance
 ```
 
-The local seed administrator has a random non-login password; configure a real account through a future admin setup flow.
+The local seed administrator has a random non-login password. Create a usable Admin account with `npm.cmd run admin:create`.
 
-For an online lab, provision a managed PostgreSQL database with TLS and set `DATABASE_URL` in the hosting environment. Never commit database credentials.
+For an online lab, provision a managed PostgreSQL database with TLS and set `DATABASE_URL` plus a unique `AUTH_SECRET` (at least 32 random bytes) in the hosting environment. Never commit database credentials or signing secrets.
 
 ## Quality checks
 
 ```powershell
 npm.cmd test
+npm.cmd run auth:check
 npm.cmd run lint
 npm.cmd run typecheck
 npm.cmd run build
@@ -108,4 +110,5 @@ npm.cmd run build
 - Phase 2 — Simulation Website: implemented and locally end-to-end tested.
 - Phase 3 — Tracking Engine: implemented and locally verified. Lint, typecheck, 12 tests, migration status, integration checks and production build passed.
 - Phase 4 — Analytics & Live Monitoring: implemented and locally verified. Database-backed dashboard, 24-hour activity, active sessions, recent event stream and aggregate behavior indicators.
-- Phase 5 — Admin Dashboard & RBAC: next.
+- Phase 5 — Authentication & RBAC: implemented locally. Login, signed session cookie, protected dashboard/API, Admin-only account management and CLI administrator bootstrap. See `docs/phase-5-auth-rbac.md`.
+- Phase 6 — Security Review & Production Hardening: next.

@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Activity, Bell, ChevronDown, CircleHelp, ClipboardList, Fingerprint,
-  Globe2, LayoutDashboard, MousePointer2, Plus, Radio, Search, ShieldAlert,
+  Globe2, LayoutDashboard, LogOut, MousePointer2, Plus, Radio, Search, ShieldAlert,
   ShieldCheck, SlidersHorizontal, Users, Wifi, Zap,
 } from "lucide-react";
 
@@ -26,7 +27,8 @@ function Metric({ label, value, note, icon: Icon, tone }: { label: string; value
   return <article className="metric-card"><div className="metric-top"><span>{label}</span><span className={`metric-icon ${tone}`}><Icon size={17}/></span></div><div className="metric-value">{value}</div><div className="metric-foot"><span>{note}</span></div></article>;
 }
 
-export default function DashboardClient() {
+export default function DashboardClient({ user }: { user: { id: string; name: string; email: string; role: "ADMIN" | "RESEARCHER" } }) {
+  const router = useRouter();
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState("");
   const [updated, setUpdated] = useState("");
@@ -56,27 +58,28 @@ export default function DashboardClient() {
   return <main className="app-shell">
     <aside className="sidebar">
       <Link className="brand" href="/"><span className="brand-mark"><Fingerprint size={21}/></span><span>PHANTOM<span className="brand-light">TRACE</span><small>SIMULATION INTELLIGENCE</small></span></Link>
-      <div className="workspace-switch"><div className="workspace-avatar">T</div><div><strong>Team workspace</strong><small>Local preview</small></div><ChevronDown size={15}/></div>
+      <div className="workspace-switch"><div className="workspace-avatar">T</div><div><strong>Team workspace</strong><small>Secure workspace</small></div><ChevronDown size={15}/></div>
       <div className="nav-caption">WORKSPACE</div>
       <nav className="nav-list">
         <Link href="/" className="nav-link active"><LayoutDashboard size={17}/><span>Overview</span></Link>
         <a href="/simulation" className="nav-link"><Radio size={17}/><span>Simulation lab</span></a>
         <a href="#sessions" className="nav-link"><Activity size={17}/><span>Live sessions</span></a>
         <a href="#events" className="nav-link"><ClipboardList size={17}/><span>Event timeline</span></a>
+        {user.role === "ADMIN" && <Link href="/admin/users" className="nav-link"><Users size={17}/><span>User management</span></Link>}
       </nav>
       <div className="nav-caption nav-caption-lower">INSIGHTS</div>
       <nav className="nav-list"><a href="#behavior" className="nav-link"><Globe2 size={17}/><span>Behavior analytics</span></a><a href="#privacy" className="nav-link"><ShieldCheck size={17}/><span>Privacy controls</span></a></nav>
       <div className="sidebar-bottom">
-        <div className="privacy-card"><div><ShieldCheck size={16}/> <strong>Privacy guard active</strong></div><p>Consent-first collection. No real passwords stored.</p><span><i/> LOCAL PREVIEW ONLY</span></div>
+        <div className="privacy-card"><div><ShieldCheck size={16}/> <strong>Privacy guard active</strong></div><p>Consent-first collection. No real passwords stored.</p><span><i/> CONSENT-FIRST COLLECTION</span></div>
         <a href="#privacy" className="nav-link"><SlidersHorizontal size={17}/><span>Data notes</span></a>
-        <div className="profile-row"><div className="profile-avatar">L</div><div><strong>Local lab</strong><small>Unauthenticated preview</small></div></div>
+        <div className="profile-row"><div className="profile-avatar">{user.name.slice(0, 1).toUpperCase()}</div><div><strong>{user.name}</strong><small>{user.role === "ADMIN" ? "Administrator" : "Researcher"}</small></div></div><button className="nav-link auth-logout" onClick={async () => { await fetch("/api/auth/logout", { method: "POST" }); router.replace("/login"); }}><LogOut size={16}/><span>Sign out</span></button>
       </div>
     </aside>
     <section className="main-area">
-      <header className="topbar"><div className="breadcrumbs">Workspace <span>/</span> <strong>Overview</strong></div><div className="top-actions"><span className="environment"><i/> LOCAL DEVELOPMENT ONLY</span><button className="icon-button" aria-label="Search"><Search size={17}/></button><button className="icon-button" aria-label="Notifications"><Bell size={17}/></button><div className="top-avatar">L</div></div></header>
+      <header className="topbar"><div className="breadcrumbs">Workspace <span>/</span> <strong>Overview</strong></div><div className="top-actions"><span className="environment"><i/> AUTHENTICATED SESSION</span><button className="icon-button" aria-label="Search"><Search size={17}/></button><button className="icon-button" aria-label="Notifications"><Bell size={17}/></button><div className="top-avatar">{user.name.slice(0, 1).toUpperCase()}</div></div></header>
       <div className="content">
         <div className="welcome-row"><div><div className="eyebrow"><span/> THREAT AWARENESS / CONTROL CENTER</div><h1>Lab overview<span>.</span></h1><p className="subtitle">Live view of consented simulation activity, refreshed every 8 seconds.</p></div><a className="primary-button" href="/simulation"><Plus size={16}/> Open simulation lab</a></div>
-        <div className="notice" id="privacy"><div className="notice-icon"><ShieldCheck size={18}/></div><div><strong>Privacy-first simulation is enabled</strong><p>Local-only analytics preview. Admin authentication and role-based access are required before online deployment.</p></div><span className="notice-status">LOCAL ONLY</span></div>
+        <div className="notice" id="privacy"><div className="notice-icon"><ShieldCheck size={18}/></div><div><strong>Privacy-first simulation is enabled</strong><p>Workspace access is authenticated. Telemetry remains consent-first and privacy-limited.</p></div><span className="notice-status">PROTECTED</span></div>
         {error && <div className="notice" role="alert"><div className="notice-icon"><ShieldAlert size={18}/></div><div><strong>Analytics unavailable</strong><p>{error}</p></div></div>}
         <section className="metrics-grid">
           <Metric label="Campaigns" value={data ? fmt(data.metrics.campaigns) : "—"} note="All campaign records" icon={Radio} tone="blue"/>
@@ -109,7 +112,7 @@ export default function DashboardClient() {
           <div><strong>Reports submitted</strong><span>{data ? fmt(data.metrics.reports) : "—"} report records</span></div>
           <div><strong>Last database refresh</strong><span>{updated ? stamp(updated) : "Waiting for data"}</span></div>
         </div>
-        <footer className="footer"><span>PHANTOM TRACE <b>·</b> BUILDING AWARENESS THROUGH SAFE SIMULATION</span><span><CircleHelp size={13}/> Phase 4 · Local analytics preview</span></footer>
+        <footer className="footer"><span>PHANTOM TRACE <b>·</b> BUILDING AWARENESS THROUGH SAFE SIMULATION</span><span><CircleHelp size={13}/> Signed in as {user.role.toLowerCase()}</span></footer>
       </div>
     </section>
   </main>;

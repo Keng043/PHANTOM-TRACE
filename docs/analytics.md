@@ -4,7 +4,7 @@
 
 The local dashboard at `/` is backed by PostgreSQL data. The analytics endpoint is `GET /api/analytics/dashboard`.
 
-The endpoint intentionally returns 404 outside `NODE_ENV=development`. It is an internal preview, not an authenticated production API. Phase 5 must add Admin/Researcher authentication and authorization before online access is enabled.
+The endpoint requires a valid, active Admin or Researcher session. Requests without a valid session receive HTTP 401. It is no longer an unauthenticated development preview.
 
 ## Dashboard data
 
@@ -26,5 +26,5 @@ The browser polls every 8 seconds using `cache: no-store`. This is near-live pol
 
 - No raw IP, raw user-agent, participant pseudonym, session secret, or free-text report content is exposed by this dashboard response.
 - Session IDs are shortened for display.
-- Dashboard and endpoint must remain local-only until Phase 5 RBAC and Phase 6 security review are complete.
-- Do not deploy this preview endpoint to a public environment. Production requests receive 404 while `NODE_ENV` is not development.
+- Dashboard and endpoint require staff authentication. Complete Phase 6 security review and production hardening before public deployment.
+- The API must remain behind the staff session boundary. Public deployment is blocked until Phase 6 review is complete.

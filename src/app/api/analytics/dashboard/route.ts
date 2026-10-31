@@ -1,14 +1,13 @@
 import { connection, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
 
 const headers = { "Cache-Control": "no-store" };
 
 export async function GET() {
   await connection();
-  // Local-only preview until Phase 5 RBAC is implemented.
-  if (process.env.NODE_ENV !== "development") {
-    return NextResponse.json({ error: "Local preview only." }, { status: 404, headers });
-  }
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401, headers });
 
   const now = new Date();
   const since = new Date(now.getTime() - 24 * 60 * 60 * 1000);
