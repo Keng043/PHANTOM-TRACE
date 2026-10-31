@@ -39,6 +39,14 @@ enum ReportStatus {
   RESOLVED
 }
 
+enum ExperimentCapability {
+  NOTIFICATION
+  SCREEN_SHARING
+  INTERACTION_TRACKING
+  REMOTE_SUPPORT
+  CAMERA
+}
+
 model User {
   id           String      @id @default(cuid())
   email        String      @unique
@@ -99,6 +107,7 @@ model Session {
   deviceProfile         DeviceProfile?
   reports               Report[]
   consentRecords        ConsentRecord[]
+  capabilityConsents    CapabilityConsent[]
   @@index([campaignId, startedAt])
   @@index([participantId, startedAt])
   @@index([expiresAt, endedAt])
@@ -166,4 +175,19 @@ model ConsentRecord {
   session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   @@index([participantId, recordedAt])
   @@index([sessionId, recordedAt])
+}
+
+model CapabilityConsent {
+  id            String                @id @default(cuid())
+  sessionId     String
+  capability    ExperimentCapability
+  granted       Boolean
+  policyVersion String
+  grantedAt     DateTime?
+  revokedAt     DateTime?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  session       Session               @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@unique([sessionId, capability])
+  @@index([capability, granted, revokedAt])
 }

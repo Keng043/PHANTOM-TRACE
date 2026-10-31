@@ -39,3 +39,9 @@ The initial schema contains User, Campaign, Participant, Session, Event, DeviceP
 ## Deployment target
 
 Online lab, initially single-region. Use managed PostgreSQL with TLS, HTTPS hosting, environment-scoped secrets, database backups, and a restricted admin account. No public campaign should be activated until authentication, consent UX, rate limits, and audit coverage are tested.
+
+## Phase 6 — granular experiment consent
+
+Participant research consent is versioned and separated from each optional experiment capability. `CapabilityConsent` records a participant's opt-in state and withdrawal timestamp per session and capability. A research-consent record never substitutes for a browser or operating-system permission grant. Device APIs must request their native permission at point of use. Remote support requires a separately installed, visible, independently approved support session; selecting the study option does not enable remote access.
+
+See [Phase 6 — Experiment & Consent Engine](./phase-6-experiment-consent.md) for the participant flow, API contracts, migration, and boundaries.

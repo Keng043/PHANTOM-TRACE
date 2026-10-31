@@ -72,8 +72,8 @@ Writes a session-ended event, stamps `endedAt`, and clears the session cookie. S
 ## Maintenance
 
 Run `npm.cmd run db:maintenance` on a daily schedule in a trusted worker:
-- Mark absolute-expiry sessions as ended.
-- Close sessions idle for more than 90 seconds.
+- Mark absolute-expiry sessions as ended and revoke remaining active capability consents.
+- Close sessions idle for more than 90 seconds and revoke remaining active capability consents.
 - Delete session/event/report telemetry after 90 days.
 - Delete audit logs after 365 days.
 - Remove participants with no remaining sessions.

@@ -9,13 +9,22 @@ async function main() {
   const auditCutoff = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
 
   const result = await prisma.$transaction(async (tx) => {
+    const expiredIds = await tx.session.findMany({
+      where: { endedAt: null, expiresAt: { lte: now } }, select: { id: true },
+    });
+    const idleIds = await tx.session.findMany({
+      where: { endedAt: null, expiresAt: { gt: now }, lastSeenAt: { lt: staleCutoff } }, select: { id: true },
+    });
     const expired = await tx.session.updateMany({
-      where: { endedAt: null, expiresAt: { lte: now } },
-      data: { endedAt: now },
+      where: { id: { in: expiredIds.map((session) => session.id) }, endedAt: null }, data: { endedAt: now },
     });
     const idle = await tx.session.updateMany({
-      where: { endedAt: null, expiresAt: { gt: now }, lastSeenAt: { lt: staleCutoff } },
-      data: { endedAt: now },
+      where: { id: { in: idleIds.map((session) => session.id) }, endedAt: null }, data: { endedAt: now },
+    });
+    const closedSessionIds = [...expiredIds, ...idleIds].map((session) => session.id);
+    await tx.capabilityConsent.updateMany({
+      where: { sessionId: { in: closedSessionIds }, granted: true, revokedAt: null },
+      data: { granted: false, revokedAt: now },
     });
     const oldSessions = await tx.session.deleteMany({
       where: { OR: [{ endedAt: { lt: retentionCutoff } }, { expiresAt: { lt: retentionCutoff } }] },

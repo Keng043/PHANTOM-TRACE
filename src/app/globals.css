@@ -120,3 +120,27 @@ h1{font-size:29px;letter-spacing:-.8px;margin:11px 0 7px;font-weight:650}h1 span
 .role-pill{font-size:8px;padding:5px 7px;border-radius:4px;border:1px solid #34506a;color:#9bc9e6}
 .role-pill.admin{border-color:#675632;color:#e5c58b}.user-active,.user-disabled{font-size:7px;letter-spacing:.8px;color:#76d8b5}.user-disabled{color:#e49b9b}
 @media(max-width:760px){.admin-page{padding:18px 14px}.admin-grid{grid-template-columns:1fr}.admin-user-row{gap:7px}.admin-user-meta{min-width:90px}}
+
+/* PHASE 6 — granular, revocable experiment consent */
+.experiment-consent-card{max-width:760px}
+.experiment-notice{display:grid;gap:13px;margin:23px 0;padding:17px;border:1px solid #26394c;border-radius:9px;background:#0d1927}
+.experiment-notice article+article{border-top:1px solid #223448;padding-top:12px}
+.experiment-notice strong{font-size:11px;color:#dce8f4}
+.experiment-notice p{font-size:10px;line-height:1.75;color:#899db1;margin:5px 0 0}
+.capability-heading{display:flex;align-items:center;justify-content:space-between;margin:22px 0 10px;color:#cbd9e7}
+.capability-heading>div{display:grid;gap:4px}.capability-heading strong{font-size:12px}.capability-heading span{font-size:9px;color:#8296aa}
+.capability-list{display:grid;gap:8px;margin-bottom:22px}
+.capability-option{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #293b50;border-radius:8px;background:#0e1a29;min-width:0}
+label.capability-option{cursor:pointer;transition:border-color .15s,background .15s}
+label.capability-option.selected{border-color:#397d79;background:#102725}
+.capability-option>input{width:15px;height:15px;accent-color:#58d6d0;flex-shrink:0}
+.capability-icon{width:33px;height:33px;display:grid;place-items:center;flex-shrink:0;border-radius:8px;background:#18313c;color:#77d9d0}
+.capability-copy{display:grid;gap:4px;min-width:0;flex:1}
+.capability-copy strong{font-size:11px;color:#dce7f2}.capability-copy small{font-size:9px;line-height:1.6;color:#879bb0}
+.capability-check{color:#67d5bb;opacity:0}.selected .capability-check{opacity:1}
+.sim-revoke{flex-shrink:0;border:1px solid #76504a;border-radius:5px;background:#291b1d;color:#e9aaa1;padding:7px 9px;font-size:9px}
+.sim-revoke:disabled{opacity:.55;cursor:wait}
+.experiment-session-card{max-width:720px}
+.experiment-empty{padding:15px;border:1px dashed #3b5064;border-radius:8px;color:#9aadc0;font-size:10px;line-height:1.7}
+.experiment-end{width:100%;margin-top:10px}
+@media(max-width:560px){.capability-option{gap:8px;padding:10px}.capability-copy small{font-size:8px}.sim-revoke{padding:6px;font-size:8px}}

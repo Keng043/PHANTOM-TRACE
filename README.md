@@ -1,8 +1,8 @@
 # PHANTOM TRACE
 
-**Phishing Awareness & Web Telemetry Platform**
+**Consent-based Device Security Experiment Platform**
 
-A consent-first simulation lab for security-awareness training. The platform uses original demo pages, pseudonymous participant identifiers, minimal browser metadata, and transparent consent. It must never collect real passwords or impersonate a real service.
+A consent-first research lab for studying participant responses to device permissions and security interactions. The platform uses pseudonymous sessions, granular and revocable capability consent, and explicit native permission prompts. It must never collect credentials or enable covert device access.
 
 ## Foundation stack
 
@@ -94,6 +94,18 @@ npm.cmd run typecheck
 npm.cmd run build
 ```
 
+## Phase 6 — Experiment & Consent Engine
+
+- `/simulation`: versioned research notice with optional consent for Notification, Screen Sharing, Interaction Tracking, Remote Support Study, and Camera Study.
+- `/simulation/experiment`: participant control panel to review and withdraw each selected capability or end the session.
+- `CapabilityConsent` stores per-session capability consent, policy version, grant time, and revocation time.
+- `GET /api/simulation/consent` and `POST /api/simulation/consent/revoke` expose only the active participant session's consent state.
+- Overall research consent and each optional capability are separate. No optional capability is required to enter the lab.
+- Research consent does not grant browser/OS permission. Native permission prompts and their outcomes are separate Phase 7 work.
+- Remote Support Study records interest only; no agent, connection, or remote control is enabled in this phase.
+- No screen, camera, microphone, or personal content is captured by this phase.
+- Details: `docs/phase-6-experiment-consent.md`.
+
 ## Safety boundaries
 
 - Consent must be presented before any telemetry is collected.
@@ -111,4 +123,9 @@ npm.cmd run build
 - Phase 3 — Tracking Engine: implemented and locally verified. Lint, typecheck, 12 tests, migration status, integration checks and production build passed.
 - Phase 4 — Analytics & Live Monitoring: implemented and locally verified. Database-backed dashboard, 24-hour activity, active sessions, recent event stream and aggregate behavior indicators.
 - Phase 5 — Authentication & RBAC: implemented locally. Login, signed session cookie, protected dashboard/API, Admin-only account management and CLI administrator bootstrap. See `docs/phase-5-auth-rbac.md`.
-- Phase 6 — Security Review & Production Hardening: next.
+- Phase 6 — Experiment & Consent Engine: implemented locally; granular opt-in, per-capability withdrawal, session control panel, and Prisma migration applied.
+- Phase 7 — Device Permission Modules: next (native Notification, Screen Sharing, and Camera prompts with independent user approval).
+- Phase 8 — Interaction Tracking: planned.
+- Phase 9 — Remote Support Lab: planned; separately installed, visible, and independently approved only.
+- Phase 10 — Experiment Analytics: planned.
+- Phase 11 — Security Review & Deployment Readiness: planned.

@@ -13,10 +13,15 @@ export async function POST(request: NextRequest) {
     });
     if (session && !session.endedAt) {
       await prisma.$transaction(async (tx) => {
+        const endedAt = new Date();
         await tx.event.create({ data: { sessionId: session.id, type: "SESSION_ENDED", path: "/simulation/learn" } });
+        await tx.capabilityConsent.updateMany({
+          where: { sessionId: session.id, granted: true, revokedAt: null },
+          data: { granted: false, revokedAt: endedAt },
+        });
         await tx.session.updateMany({
           where: { id: session.id, endedAt: null },
-          data: { endedAt: new Date() },
+          data: { endedAt },
         });
       });
     }
