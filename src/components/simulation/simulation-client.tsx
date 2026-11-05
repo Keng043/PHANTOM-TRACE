@@ -56,10 +56,12 @@ export function SimulationClient() {
         if (response.status === 401 && active) router.replace("/simulation");
       } catch { /* Transient telemetry failures must not block the training content. */ }
     };
-    void send("/api/simulation/event", {
-      clientEventId: crypto.randomUUID(), type: "PAGE_VIEW", path: "/simulation/demo",
-    });
-    void send("/api/simulation/device-profile", collectCoarseDeviceProfile());
+    void fetch("/api/simulation/consent", { cache: "no-store" }).then((response) => response.ok ? response.json() : null).then((consent) => {
+      if (!active || !consent) return;
+      const approved = (field: string) => consent.dataFields?.some((item: { dataField: string; granted: boolean; revokedAt: string | null; policyVersion: string }) => item.dataField === field && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+      if (approved("USAGE_EVENTS")) void send("/api/simulation/event", { clientEventId: crypto.randomUUID(), type: "PAGE_VIEW", path: "/simulation/demo" });
+      if (approved("COARSE_DEVICE_PROFILE")) void send("/api/simulation/device-profile", collectCoarseDeviceProfile());
+    }).catch(() => undefined);
 
     const heartbeat = () => {
       if (document.visibilityState !== "visible") return;
@@ -85,7 +87,9 @@ export function SimulationClient() {
       const consent = await consentResponse.json();
       const interactionAllowed = consent?.capabilities?.some((item: { capability: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
         item.capability === "INTERACTION_TRACKING" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
-      if (interactionAllowed) {
+      const usageAllowed = consent?.dataFields?.some((item: { dataField: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
+        item.dataField === "USAGE_EVENTS" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+      if (interactionAllowed && usageAllowed) {
         await recordEvent(decision === "report" ? "REPORT_SUBMITTED" : "DEMO_FORM_SUBMITTED", "/simulation/demo", decision);
       }
       setCompleted(true);
@@ -93,7 +97,7 @@ export function SimulationClient() {
         ? decision === "report"
           ? "Report action recorded. Good instinct — verify the sender before interacting."
           : "Your choice has been recorded. Continue to the learning review."
-        : "Your choice stays in this page and was not stored because Interaction signals was not selected.");
+        : "Your choice stays in this page and was not stored because the required interaction and usage data approvals are not both active.");
     } catch (error) { setMessage(error instanceof Error ? error.message : "Unable to record this action."); }
     finally { setBusy(false); }
   }
@@ -101,7 +105,10 @@ export function SimulationClient() {
   async function finish() {
     setBusy(true);
     try {
-      await recordEvent("EDUCATION_VIEWED", "/simulation/learn");
+      const consentResponse = await fetch("/api/simulation/consent", { cache: "no-store" });
+      const consent = consentResponse.ok ? await consentResponse.json() : null;
+      const usageAllowed = consent?.dataFields?.some((item: { dataField: string; granted: boolean; revokedAt: string | null; policyVersion: string }) => item.dataField === "USAGE_EVENTS" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+      if (usageAllowed) await recordEvent("EDUCATION_VIEWED", "/simulation/learn");
       const response = await fetch("/api/simulation/end", { method: "POST" });
       const result = await response.json();
       router.push(result.next ?? "/simulation/learn");

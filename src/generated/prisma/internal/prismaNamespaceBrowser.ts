@@ -62,7 +62,8 @@ export const ModelName = {
   ConsentRecord: 'ConsentRecord',
   SupportRoom: 'SupportRoom',
   SupportSignal: 'SupportSignal',
-  CapabilityConsent: 'CapabilityConsent'
+  CapabilityConsent: 'CapabilityConsent',
+  DataFieldConsent: 'DataFieldConsent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -245,6 +246,21 @@ export const CapabilityConsentScalarFieldEnum = {
 } as const
 
 export type CapabilityConsentScalarFieldEnum = (typeof CapabilityConsentScalarFieldEnum)[keyof typeof CapabilityConsentScalarFieldEnum]
+
+
+export const DataFieldConsentScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  dataField: 'dataField',
+  granted: 'granted',
+  policyVersion: 'policyVersion',
+  grantedAt: 'grantedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DataFieldConsentScalarFieldEnum = (typeof DataFieldConsentScalarFieldEnum)[keyof typeof DataFieldConsentScalarFieldEnum]
 
 
 export const SortOrder = {

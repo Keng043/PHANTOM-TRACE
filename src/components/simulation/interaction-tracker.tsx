@@ -83,8 +83,11 @@ export function InteractionTracker() {
       .then((response) => response.ok ? response.json() : null)
       .then((data) => {
         if (!active || !data) return;
-        enabled = data.capabilities?.some((item: { capability: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
+        const activityAllowed = data.capabilities?.some((item: { capability: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
           item.capability === "INTERACTION_TRACKING" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+        const dataAllowed = data.dataFields?.some((item: { dataField: string; granted: boolean; revokedAt: string | null; policyVersion: string }) =>
+          item.dataField === "INTERACTION_SIGNALS" && item.granted && !item.revokedAt && item.policyVersion === POLICY_VERSION);
+        enabled = Boolean(activityAllowed && dataAllowed);
         if (!enabled) return;
         document.addEventListener("click", onClick, true);
         document.addEventListener("change", onChange, true);

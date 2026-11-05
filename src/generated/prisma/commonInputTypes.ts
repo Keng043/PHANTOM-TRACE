@@ -413,6 +413,23 @@ export type EnumExperimentCapabilityWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumExperimentCapabilityFilter<$PrismaModel>
 }
 
+export type EnumApprovedDataFieldFilter<$PrismaModel = never> = {
+  equals?: $Enums.ApprovedDataField | Prisma.EnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  in?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel> | $Enums.ApprovedDataField
+}
+
+export type EnumApprovedDataFieldWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ApprovedDataField | Prisma.EnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  in?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumApprovedDataFieldWithAggregatesFilter<$PrismaModel> | $Enums.ApprovedDataField
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -769,6 +786,23 @@ export type NestedEnumExperimentCapabilityWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumExperimentCapabilityFilter<$PrismaModel>
   _max?: Prisma.NestedEnumExperimentCapabilityFilter<$PrismaModel>
+}
+
+export type NestedEnumApprovedDataFieldFilter<$PrismaModel = never> = {
+  equals?: $Enums.ApprovedDataField | Prisma.EnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  in?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel> | $Enums.ApprovedDataField
+}
+
+export type NestedEnumApprovedDataFieldWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ApprovedDataField | Prisma.EnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  in?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ApprovedDataField[] | Prisma.ListEnumApprovedDataFieldFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumApprovedDataFieldWithAggregatesFilter<$PrismaModel> | $Enums.ApprovedDataField
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumApprovedDataFieldFilter<$PrismaModel>
 }
 
 

@@ -77,3 +77,8 @@ export type SupportSignal = Prisma.SupportSignalModel
  *
  */
 export type CapabilityConsent = Prisma.CapabilityConsentModel
+/**
+ * Model DataFieldConsent
+ *
+ */
+export type DataFieldConsent = Prisma.DataFieldConsentModel

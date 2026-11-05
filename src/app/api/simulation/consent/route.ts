@@ -11,12 +11,15 @@ export async function GET(request: NextRequest) {
     select: {
       id: true, endedAt: true, expiresAt: true,
       capabilityConsents: { select: { capability: true, granted: true, grantedAt: true, revokedAt: true, policyVersion: true }, orderBy: { createdAt: "asc" } },
+      dataFieldConsents: { select: { dataField: true, granted: true, grantedAt: true, revokedAt: true, policyVersion: true }, orderBy: { createdAt: "asc" } },
     },
   });
   if (!session || session.endedAt || session.expiresAt <= now) {
     return NextResponse.json({ error: "The experiment session is not active." }, { status: 401 });
   }
-  return NextResponse.json({ capabilities: session.capabilityConsents, expiresAt: session.expiresAt.toISOString() }, {
-    headers: { "Cache-Control": "no-store" },
-  });
+  return NextResponse.json({
+    capabilities: session.capabilityConsents,
+    dataFields: session.dataFieldConsents,
+    expiresAt: session.expiresAt.toISOString(),
+  }, { headers: { "Cache-Control": "no-store" } });
 }

@@ -66,6 +66,16 @@ export const ExperimentCapability = {
 export type ExperimentCapability = (typeof ExperimentCapability)[keyof typeof ExperimentCapability]
 
 
+export const ApprovedDataField = {
+  USAGE_EVENTS: 'USAGE_EVENTS',
+  INTERACTION_SIGNALS: 'INTERACTION_SIGNALS',
+  COARSE_DEVICE_PROFILE: 'COARSE_DEVICE_PROFILE',
+  PERMISSION_OUTCOMES: 'PERMISSION_OUTCOMES'
+} as const
+
+export type ApprovedDataField = (typeof ApprovedDataField)[keyof typeof ApprovedDataField]
+
+
 export const SupportRoomStatus = {
   PENDING: 'PENDING',
   ACTIVE: 'ACTIVE',

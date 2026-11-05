@@ -49,6 +49,13 @@ enum ExperimentCapability {
   CAMERA
 }
 
+enum ApprovedDataField {
+  USAGE_EVENTS
+  INTERACTION_SIGNALS
+  COARSE_DEVICE_PROFILE
+  PERMISSION_OUTCOMES
+}
+
 enum SupportRoomStatus {
   PENDING
   ACTIVE
@@ -129,6 +136,7 @@ model Session {
   reports               Report[]
   consentRecords        ConsentRecord[]
   capabilityConsents    CapabilityConsent[]
+  dataFieldConsents     DataFieldConsent[]
   supportRoom           SupportRoom?
   @@index([campaignId, startedAt])
   @@index([participantId, startedAt])
@@ -239,4 +247,19 @@ model CapabilityConsent {
   session       Session               @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   @@unique([sessionId, capability])
   @@index([capability, granted, revokedAt])
+}
+
+model DataFieldConsent {
+  id            String           @id @default(cuid())
+  sessionId     String
+  dataField     ApprovedDataField
+  granted       Boolean          @default(true)
+  policyVersion String
+  grantedAt     DateTime         @default(now())
+  revokedAt     DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  session       Session          @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@unique([sessionId, dataField])
+  @@index([dataField, granted, revokedAt])
 }

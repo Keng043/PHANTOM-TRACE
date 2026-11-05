@@ -5,13 +5,13 @@ import { Bell, Camera, Monitor, ShieldCheck, Square, Video } from "lucide-react"
 
 type Capability = "NOTIFICATION" | "SCREEN_SHARING" | "CAMERA";
 type Outcome = "GRANTED" | "DENIED" | "UNAVAILABLE" | "ERROR" | "STOPPED";
-type Props = { authorized: string[] };
+type Props = { authorized: string[]; recordOutcomes: boolean };
 
 const names: Record<Capability, string> = {
   NOTIFICATION: "Notifications", SCREEN_SHARING: "Screen sharing", CAMERA: "Camera",
 };
 
-export function DevicePermissionLab({ authorized }: Props) {
+export function DevicePermissionLab({ authorized, recordOutcomes }: Props) {
   const [notificationState, setNotificationState] = useState("Browser permission is checked when you start the test.");
   const [screenStream, setScreenStream] = useState<MediaStream | null>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
@@ -26,6 +26,7 @@ export function DevicePermissionLab({ authorized }: Props) {
   const cameraAllowed = allowed("CAMERA");
 
   const report = useCallback(async (capability: Capability, outcome: Outcome): Promise<boolean> => {
+    if (!recordOutcomes) return true;
     try {
       const response = await fetch("/api/simulation/permission-result", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -41,7 +42,7 @@ export function DevicePermissionLab({ authorized }: Props) {
       setMessage("Permission result could not be sent. No screen or camera content is uploaded.");
       return false;
     }
-  }, []);
+  }, [recordOutcomes]);
 
   useEffect(() => {
     return () => {

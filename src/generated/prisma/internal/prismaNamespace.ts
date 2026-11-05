@@ -408,7 +408,8 @@ export const ModelName = {
   ConsentRecord: 'ConsentRecord',
   SupportRoom: 'SupportRoom',
   SupportSignal: 'SupportSignal',
-  CapabilityConsent: 'CapabilityConsent'
+  CapabilityConsent: 'CapabilityConsent',
+  DataFieldConsent: 'DataFieldConsent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "campaign" | "participant" | "session" | "event" | "deviceProfile" | "report" | "auditLog" | "consentRecord" | "supportRoom" | "supportSignal" | "capabilityConsent"
+    modelProps: "user" | "campaign" | "participant" | "session" | "event" | "deviceProfile" | "report" | "auditLog" | "consentRecord" | "supportRoom" | "supportSignal" | "capabilityConsent" | "dataFieldConsent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1317,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DataFieldConsent: {
+      payload: Prisma.$DataFieldConsentPayload<ExtArgs>
+      fields: Prisma.DataFieldConsentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DataFieldConsentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DataFieldConsentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        findFirst: {
+          args: Prisma.DataFieldConsentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DataFieldConsentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        findMany: {
+          args: Prisma.DataFieldConsentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>[]
+        }
+        create: {
+          args: Prisma.DataFieldConsentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        createMany: {
+          args: Prisma.DataFieldConsentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DataFieldConsentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>[]
+        }
+        delete: {
+          args: Prisma.DataFieldConsentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        update: {
+          args: Prisma.DataFieldConsentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        deleteMany: {
+          args: Prisma.DataFieldConsentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DataFieldConsentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DataFieldConsentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>[]
+        }
+        upsert: {
+          args: Prisma.DataFieldConsentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DataFieldConsentPayload>
+        }
+        aggregate: {
+          args: Prisma.DataFieldConsentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDataFieldConsent>
+        }
+        groupBy: {
+          args: Prisma.DataFieldConsentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DataFieldConsentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DataFieldConsentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DataFieldConsentCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1519,6 +1594,21 @@ export const CapabilityConsentScalarFieldEnum = {
 } as const
 
 export type CapabilityConsentScalarFieldEnum = (typeof CapabilityConsentScalarFieldEnum)[keyof typeof CapabilityConsentScalarFieldEnum]
+
+
+export const DataFieldConsentScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  dataField: 'dataField',
+  granted: 'granted',
+  policyVersion: 'policyVersion',
+  grantedAt: 'grantedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DataFieldConsentScalarFieldEnum = (typeof DataFieldConsentScalarFieldEnum)[keyof typeof DataFieldConsentScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1751,6 +1841,20 @@ export type ListEnumExperimentCapabilityFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
+ * Reference to a field of type 'ApprovedDataField'
+ */
+export type EnumApprovedDataFieldFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovedDataField'>
+
+
+
+/**
+ * Reference to a field of type 'ApprovedDataField[]'
+ */
+export type ListEnumApprovedDataFieldFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApprovedDataField[]'>
+
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1926,6 +2030,7 @@ export type GlobalOmitConfig = {
   supportRoom?: Prisma.SupportRoomOmit
   supportSignal?: Prisma.SupportSignalOmit
   capabilityConsent?: Prisma.CapabilityConsentOmit
+  dataFieldConsent?: Prisma.DataFieldConsentOmit
 }
 
 /* Types for Logging */

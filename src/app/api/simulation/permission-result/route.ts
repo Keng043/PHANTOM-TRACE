@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         where: {
           sessionToken: hashSessionSecret(secret), consentedAt: { not: null }, endedAt: null, expiresAt: { gt: now },
           capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
+          dataFieldConsents: { some: { dataField: "PERMISSION_OUTCOMES", granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
         },
         select: { id: true, eventWindowStartedAt: true },
       });
@@ -33,6 +34,7 @@ export async function POST(request: NextRequest) {
           id: session.id, endedAt: null, expiresAt: { gt: now }, eventCount: { lt: SESSION_EVENT_LIMIT },
           ...(windowExpired ? {} : { eventWindowStartedAt: { gt: cutoff }, eventWindowCount: { lt: EVENT_WINDOW_LIMIT } }),
           capabilityConsents: { some: { capability: parsed.data.capability, granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
+          dataFieldConsents: { some: { dataField: "PERMISSION_OUTCOMES", granted: true, revokedAt: null, policyVersion: POLICY_VERSION } },
         },
         data: {
           eventCount: { increment: 1 },
@@ -50,7 +52,7 @@ export async function POST(request: NextRequest) {
       return "created" as const;
     }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
-    if (result === "inactive") return NextResponse.json({ error: "This capability is not currently authorized." }, { status: 403 });
+    if (result === "inactive") return NextResponse.json({ error: "Both activity consent and permission-outcome data approval are required." }, { status: 403 });
     if (result === "rate_limited") return NextResponse.json({ error: "Experiment event limit reached." }, { status: 429 });
     return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {

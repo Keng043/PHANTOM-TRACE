@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   }
   const parsed = ExperimentConsentSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success || parsed.data.policyVersion !== POLICY_VERSION) {
-    return NextResponse.json({ error: "Please review the current experiment notice before starting." }, { status: 400 });
+    return NextResponse.json({ error: "Please review the current experiment notice and data choices before starting." }, { status: 400 });
   }
 
   const now = new Date();
@@ -27,27 +27,31 @@ export async function POST(request: NextRequest) {
     where: { status: "ACTIVE", OR: [{ startsAt: null }, { startsAt: { lte: now } }], AND: [{ OR: [{ endsAt: null }, { endsAt: { gt: now } }] }] },
     orderBy: { createdAt: "asc" }, select: { id: true },
   });
-  if (!campaign) return NextResponse.json({ error: "The simulation lab is not available yet." }, { status: 503 });
+  if (!campaign) return NextResponse.json({ error: "The volunteer lab is not available yet." }, { status: 503 });
 
   const secret = createSessionSecret();
-  const pseudonym = `Learner-${crypto.randomUUID().slice(0, 8)}`;
+  const pseudonym = `Volunteer-${crypto.randomUUID().slice(0, 8)}`;
+  const expiresAt = getSessionExpiry(now);
   await prisma.$transaction(async (tx) => {
     const participant = await tx.participant.create({ data: { pseudonym } });
     await tx.session.create({
       data: {
         sessionToken: hashSessionSecret(secret), campaignId: campaign.id, participantId: participant.id,
         consentedAt: now, consentVersion: POLICY_VERSION,
-        expiresAt: getSessionExpiry(now), lastSeenAt: now, lastHeartbeatAt: now,
+        expiresAt, lastSeenAt: now, lastHeartbeatAt: now,
         consentRecords: { create: { participantId: participant.id, policyVersion: POLICY_VERSION, granted: true } },
         capabilityConsents: { create: parsed.data.capabilities.map((capability) => ({
           capability, granted: true, policyVersion: POLICY_VERSION, grantedAt: now,
+        })) },
+        dataFieldConsents: { create: parsed.data.approvedDataFields.map((dataField) => ({
+          dataField, granted: true, policyVersion: POLICY_VERSION, grantedAt: now,
         })) },
         events: { create: { type: "CONSENT_GRANTED", path: "/simulation" } },
       },
     });
   });
 
-  const response = NextResponse.json({ ok: true, next: "/simulation/experiment", expiresAt: getSessionExpiry(now).toISOString() });
+  const response = NextResponse.json({ ok: true, next: "/simulation/experiment", expiresAt: expiresAt.toISOString() });
   response.cookies.set(SESSION_COOKIE, secret, {
     httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict",
     path: "/", maxAge: SESSION_TTL_SECONDS,

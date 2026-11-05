@@ -299,6 +299,7 @@ export type SessionWhereInput = {
   reports?: Prisma.ReportListRelationFilter
   consentRecords?: Prisma.ConsentRecordListRelationFilter
   capabilityConsents?: Prisma.CapabilityConsentListRelationFilter
+  dataFieldConsents?: Prisma.DataFieldConsentListRelationFilter
   supportRoom?: Prisma.XOR<Prisma.SupportRoomNullableScalarRelationFilter, Prisma.SupportRoomWhereInput> | null
 }
 
@@ -324,6 +325,7 @@ export type SessionOrderByWithRelationInput = {
   reports?: Prisma.ReportOrderByRelationAggregateInput
   consentRecords?: Prisma.ConsentRecordOrderByRelationAggregateInput
   capabilityConsents?: Prisma.CapabilityConsentOrderByRelationAggregateInput
+  dataFieldConsents?: Prisma.DataFieldConsentOrderByRelationAggregateInput
   supportRoom?: Prisma.SupportRoomOrderByWithRelationInput
 }
 
@@ -352,6 +354,7 @@ export type SessionWhereUniqueInput = Prisma.AtLeast<{
   reports?: Prisma.ReportListRelationFilter
   consentRecords?: Prisma.ConsentRecordListRelationFilter
   capabilityConsents?: Prisma.CapabilityConsentListRelationFilter
+  dataFieldConsents?: Prisma.DataFieldConsentListRelationFilter
   supportRoom?: Prisma.XOR<Prisma.SupportRoomNullableScalarRelationFilter, Prisma.SupportRoomWhereInput> | null
 }, "id" | "sessionToken">
 
@@ -417,6 +420,7 @@ export type SessionCreateInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -440,6 +444,7 @@ export type SessionUncheckedCreateInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -463,6 +468,7 @@ export type SessionUpdateInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -486,6 +492,7 @@ export type SessionUncheckedUpdateInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -782,6 +789,20 @@ export type SessionUpdateOneRequiredWithoutCapabilityConsentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutCapabilityConsentsInput, Prisma.SessionUpdateWithoutCapabilityConsentsInput>, Prisma.SessionUncheckedUpdateWithoutCapabilityConsentsInput>
 }
 
+export type SessionCreateNestedOneWithoutDataFieldConsentsInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedCreateWithoutDataFieldConsentsInput>
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutDataFieldConsentsInput
+  connect?: Prisma.SessionWhereUniqueInput
+}
+
+export type SessionUpdateOneRequiredWithoutDataFieldConsentsNestedInput = {
+  create?: Prisma.XOR<Prisma.SessionCreateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedCreateWithoutDataFieldConsentsInput>
+  connectOrCreate?: Prisma.SessionCreateOrConnectWithoutDataFieldConsentsInput
+  upsert?: Prisma.SessionUpsertWithoutDataFieldConsentsInput
+  connect?: Prisma.SessionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SessionUpdateToOneWithWhereWithoutDataFieldConsentsInput, Prisma.SessionUpdateWithoutDataFieldConsentsInput>, Prisma.SessionUncheckedUpdateWithoutDataFieldConsentsInput>
+}
+
 export type SessionCreateWithoutCampaignInput = {
   id?: string
   sessionToken: string
@@ -801,6 +822,7 @@ export type SessionCreateWithoutCampaignInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -823,6 +845,7 @@ export type SessionUncheckedCreateWithoutCampaignInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -891,6 +914,7 @@ export type SessionCreateWithoutParticipantInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -913,6 +937,7 @@ export type SessionUncheckedCreateWithoutParticipantInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -961,6 +986,7 @@ export type SessionCreateWithoutEventsInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -983,6 +1009,7 @@ export type SessionUncheckedCreateWithoutEventsInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -1021,6 +1048,7 @@ export type SessionUpdateWithoutEventsInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1043,6 +1071,7 @@ export type SessionUncheckedUpdateWithoutEventsInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1065,6 +1094,7 @@ export type SessionCreateWithoutDeviceProfileInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -1087,6 +1117,7 @@ export type SessionUncheckedCreateWithoutDeviceProfileInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -1125,6 +1156,7 @@ export type SessionUpdateWithoutDeviceProfileInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1147,6 +1179,7 @@ export type SessionUncheckedUpdateWithoutDeviceProfileInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1169,6 +1202,7 @@ export type SessionCreateWithoutReportsInput = {
   deviceProfile?: Prisma.DeviceProfileCreateNestedOneWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -1191,6 +1225,7 @@ export type SessionUncheckedCreateWithoutReportsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedCreateNestedOneWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -1229,6 +1264,7 @@ export type SessionUpdateWithoutReportsInput = {
   deviceProfile?: Prisma.DeviceProfileUpdateOneWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1251,6 +1287,7 @@ export type SessionUncheckedUpdateWithoutReportsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedUpdateOneWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1273,6 +1310,7 @@ export type SessionCreateWithoutConsentRecordsInput = {
   deviceProfile?: Prisma.DeviceProfileCreateNestedOneWithoutSessionInput
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -1295,6 +1333,7 @@ export type SessionUncheckedCreateWithoutConsentRecordsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedCreateNestedOneWithoutSessionInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -1333,6 +1372,7 @@ export type SessionUpdateWithoutConsentRecordsInput = {
   deviceProfile?: Prisma.DeviceProfileUpdateOneWithoutSessionNestedInput
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1355,6 +1395,7 @@ export type SessionUncheckedUpdateWithoutConsentRecordsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedUpdateOneWithoutSessionNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1378,6 +1419,7 @@ export type SessionCreateWithoutSupportRoomInput = {
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
 }
 
 export type SessionUncheckedCreateWithoutSupportRoomInput = {
@@ -1400,6 +1442,7 @@ export type SessionUncheckedCreateWithoutSupportRoomInput = {
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type SessionCreateOrConnectWithoutSupportRoomInput = {
@@ -1438,6 +1481,7 @@ export type SessionUpdateWithoutSupportRoomInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionUncheckedUpdateWithoutSupportRoomInput = {
@@ -1460,6 +1504,7 @@ export type SessionUncheckedUpdateWithoutSupportRoomInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type SessionCreateWithoutCapabilityConsentsInput = {
@@ -1481,6 +1526,7 @@ export type SessionCreateWithoutCapabilityConsentsInput = {
   deviceProfile?: Prisma.DeviceProfileCreateNestedOneWithoutSessionInput
   reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
 }
 
@@ -1503,6 +1549,7 @@ export type SessionUncheckedCreateWithoutCapabilityConsentsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedCreateNestedOneWithoutSessionInput
   reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
   consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedCreateNestedManyWithoutSessionInput
   supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
 }
 
@@ -1541,6 +1588,7 @@ export type SessionUpdateWithoutCapabilityConsentsInput = {
   deviceProfile?: Prisma.DeviceProfileUpdateOneWithoutSessionNestedInput
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1563,6 +1611,115 @@ export type SessionUncheckedUpdateWithoutCapabilityConsentsInput = {
   deviceProfile?: Prisma.DeviceProfileUncheckedUpdateOneWithoutSessionNestedInput
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
+  supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
+}
+
+export type SessionCreateWithoutDataFieldConsentsInput = {
+  id?: string
+  sessionToken: string
+  startedAt?: Date | string
+  endedAt?: Date | string | null
+  consentedAt?: Date | string | null
+  consentVersion?: string | null
+  expiresAt: Date | string
+  lastSeenAt?: Date | string
+  lastHeartbeatAt?: Date | string
+  eventCount?: number
+  eventWindowStartedAt?: Date | string
+  eventWindowCount?: number
+  campaign: Prisma.CampaignCreateNestedOneWithoutSessionsInput
+  participant: Prisma.ParticipantCreateNestedOneWithoutSessionsInput
+  events?: Prisma.EventCreateNestedManyWithoutSessionInput
+  deviceProfile?: Prisma.DeviceProfileCreateNestedOneWithoutSessionInput
+  reports?: Prisma.ReportCreateNestedManyWithoutSessionInput
+  consentRecords?: Prisma.ConsentRecordCreateNestedManyWithoutSessionInput
+  capabilityConsents?: Prisma.CapabilityConsentCreateNestedManyWithoutSessionInput
+  supportRoom?: Prisma.SupportRoomCreateNestedOneWithoutSessionInput
+}
+
+export type SessionUncheckedCreateWithoutDataFieldConsentsInput = {
+  id?: string
+  sessionToken: string
+  campaignId: string
+  participantId: string
+  startedAt?: Date | string
+  endedAt?: Date | string | null
+  consentedAt?: Date | string | null
+  consentVersion?: string | null
+  expiresAt: Date | string
+  lastSeenAt?: Date | string
+  lastHeartbeatAt?: Date | string
+  eventCount?: number
+  eventWindowStartedAt?: Date | string
+  eventWindowCount?: number
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutSessionInput
+  deviceProfile?: Prisma.DeviceProfileUncheckedCreateNestedOneWithoutSessionInput
+  reports?: Prisma.ReportUncheckedCreateNestedManyWithoutSessionInput
+  consentRecords?: Prisma.ConsentRecordUncheckedCreateNestedManyWithoutSessionInput
+  capabilityConsents?: Prisma.CapabilityConsentUncheckedCreateNestedManyWithoutSessionInput
+  supportRoom?: Prisma.SupportRoomUncheckedCreateNestedOneWithoutSessionInput
+}
+
+export type SessionCreateOrConnectWithoutDataFieldConsentsInput = {
+  where: Prisma.SessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.SessionCreateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedCreateWithoutDataFieldConsentsInput>
+}
+
+export type SessionUpsertWithoutDataFieldConsentsInput = {
+  update: Prisma.XOR<Prisma.SessionUpdateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedUpdateWithoutDataFieldConsentsInput>
+  create: Prisma.XOR<Prisma.SessionCreateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedCreateWithoutDataFieldConsentsInput>
+  where?: Prisma.SessionWhereInput
+}
+
+export type SessionUpdateToOneWithWhereWithoutDataFieldConsentsInput = {
+  where?: Prisma.SessionWhereInput
+  data: Prisma.XOR<Prisma.SessionUpdateWithoutDataFieldConsentsInput, Prisma.SessionUncheckedUpdateWithoutDataFieldConsentsInput>
+}
+
+export type SessionUpdateWithoutDataFieldConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionToken?: Prisma.StringFieldUpdateOperationsInput | string
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastHeartbeatAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
+  eventWindowStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventWindowCount?: Prisma.IntFieldUpdateOperationsInput | number
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutSessionsNestedInput
+  participant?: Prisma.ParticipantUpdateOneRequiredWithoutSessionsNestedInput
+  events?: Prisma.EventUpdateManyWithoutSessionNestedInput
+  deviceProfile?: Prisma.DeviceProfileUpdateOneWithoutSessionNestedInput
+  reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
+  consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
+  capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
+}
+
+export type SessionUncheckedUpdateWithoutDataFieldConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionToken?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  participantId?: Prisma.StringFieldUpdateOperationsInput | string
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  consentVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastHeartbeatAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventCount?: Prisma.IntFieldUpdateOperationsInput | number
+  eventWindowStartedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventWindowCount?: Prisma.IntFieldUpdateOperationsInput | number
+  events?: Prisma.EventUncheckedUpdateManyWithoutSessionNestedInput
+  deviceProfile?: Prisma.DeviceProfileUncheckedUpdateOneWithoutSessionNestedInput
+  reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
+  consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
+  capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1601,6 +1758,7 @@ export type SessionUpdateWithoutCampaignInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1623,6 +1781,7 @@ export type SessionUncheckedUpdateWithoutCampaignInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1677,6 +1836,7 @@ export type SessionUpdateWithoutParticipantInput = {
   reports?: Prisma.ReportUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUpdateOneWithoutSessionNestedInput
 }
 
@@ -1699,6 +1859,7 @@ export type SessionUncheckedUpdateWithoutParticipantInput = {
   reports?: Prisma.ReportUncheckedUpdateManyWithoutSessionNestedInput
   consentRecords?: Prisma.ConsentRecordUncheckedUpdateManyWithoutSessionNestedInput
   capabilityConsents?: Prisma.CapabilityConsentUncheckedUpdateManyWithoutSessionNestedInput
+  dataFieldConsents?: Prisma.DataFieldConsentUncheckedUpdateManyWithoutSessionNestedInput
   supportRoom?: Prisma.SupportRoomUncheckedUpdateOneWithoutSessionNestedInput
 }
 
@@ -1728,6 +1889,7 @@ export type SessionCountOutputType = {
   reports: number
   consentRecords: number
   capabilityConsents: number
+  dataFieldConsents: number
 }
 
 export type SessionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1735,6 +1897,7 @@ export type SessionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   reports?: boolean | SessionCountOutputTypeCountReportsArgs
   consentRecords?: boolean | SessionCountOutputTypeCountConsentRecordsArgs
   capabilityConsents?: boolean | SessionCountOutputTypeCountCapabilityConsentsArgs
+  dataFieldConsents?: boolean | SessionCountOutputTypeCountDataFieldConsentsArgs
 }
 
 /**
@@ -1775,6 +1938,13 @@ export type SessionCountOutputTypeCountCapabilityConsentsArgs<ExtArgs extends ru
   where?: Prisma.CapabilityConsentWhereInput
 }
 
+/**
+ * SessionCountOutputType without action
+ */
+export type SessionCountOutputTypeCountDataFieldConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DataFieldConsentWhereInput
+}
+
 
 export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1798,6 +1968,7 @@ export type SessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   reports?: boolean | Prisma.Session$reportsArgs<ExtArgs>
   consentRecords?: boolean | Prisma.Session$consentRecordsArgs<ExtArgs>
   capabilityConsents?: boolean | Prisma.Session$capabilityConsentsArgs<ExtArgs>
+  dataFieldConsents?: boolean | Prisma.Session$dataFieldConsentsArgs<ExtArgs>
   supportRoom?: boolean | Prisma.Session$supportRoomArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["session"]>
@@ -1866,6 +2037,7 @@ export type SessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   reports?: boolean | Prisma.Session$reportsArgs<ExtArgs>
   consentRecords?: boolean | Prisma.Session$consentRecordsArgs<ExtArgs>
   capabilityConsents?: boolean | Prisma.Session$capabilityConsentsArgs<ExtArgs>
+  dataFieldConsents?: boolean | Prisma.Session$dataFieldConsentsArgs<ExtArgs>
   supportRoom?: boolean | Prisma.Session$supportRoomArgs<ExtArgs>
   _count?: boolean | Prisma.SessionCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1888,6 +2060,7 @@ export type $SessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     reports: Prisma.$ReportPayload<ExtArgs>[]
     consentRecords: Prisma.$ConsentRecordPayload<ExtArgs>[]
     capabilityConsents: Prisma.$CapabilityConsentPayload<ExtArgs>[]
+    dataFieldConsents: Prisma.$DataFieldConsentPayload<ExtArgs>[]
     supportRoom: Prisma.$SupportRoomPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2306,6 +2479,7 @@ export interface Prisma__SessionClient<T, Null = never, ExtArgs extends runtime.
   reports<T extends Prisma.Session$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consentRecords<T extends Prisma.Session$consentRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$consentRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsentRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   capabilityConsents<T extends Prisma.Session$capabilityConsentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$capabilityConsentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CapabilityConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dataFieldConsents<T extends Prisma.Session$dataFieldConsentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$dataFieldConsentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DataFieldConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportRoom<T extends Prisma.Session$supportRoomArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Session$supportRoomArgs<ExtArgs>>): Prisma.Prisma__SupportRoomClient<runtime.Types.Result.GetResult<Prisma.$SupportRoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2863,6 +3037,30 @@ export type Session$capabilityConsentsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.CapabilityConsentScalarFieldEnum | Prisma.CapabilityConsentScalarFieldEnum[]
+}
+
+/**
+ * Session.dataFieldConsents
+ */
+export type Session$dataFieldConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DataFieldConsent
+   */
+  select?: Prisma.DataFieldConsentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DataFieldConsent
+   */
+  omit?: Prisma.DataFieldConsentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DataFieldConsentInclude<ExtArgs> | null
+  where?: Prisma.DataFieldConsentWhereInput
+  orderBy?: Prisma.DataFieldConsentOrderByWithRelationInput | Prisma.DataFieldConsentOrderByWithRelationInput[]
+  cursor?: Prisma.DataFieldConsentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DataFieldConsentScalarFieldEnum | Prisma.DataFieldConsentScalarFieldEnum[]
 }
 
 /**

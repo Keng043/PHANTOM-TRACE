@@ -2,28 +2,40 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Camera, CheckCircle2, Fingerprint, Monitor, MousePointer2, Bell, Unplug } from "lucide-react";
+import { ArrowRight, Camera, CheckCircle2, Fingerprint, Monitor, MousePointer2, Bell, Unplug, Activity, Laptop, ShieldCheck } from "lucide-react";
 import { POLICY_VERSION } from "@/lib/security/consent";
 
 const capabilities = [
-  { id: "NOTIFICATION", title: "Notifications", description: "Test whether browser notifications can be displayed and how participants respond.", icon: Bell },
-  { id: "SCREEN_SHARING", title: "Screen sharing", description: "Voluntarily share a selected screen or window during a supervised test.", icon: Monitor },
-  { id: "INTERACTION_TRACKING", title: "Interaction signals", description: "Record button and choice actions, scroll milestones, tab visibility, idle/return signals and coarse response-time bands — never typed content.", icon: MousePointer2 },
-  { id: "REMOTE_SUPPORT", title: "Remote assist (view-only)", description: "Allow a researcher to invite you to share one screen for live viewing. You must accept each invitation and choose the screen; remote control is not available.", icon: Unplug },
-  { id: "CAMERA", title: "Camera access study", description: "Test a camera permission request. No photo or video is recorded in this phase.", icon: Camera },
+  { id: "NOTIFICATION", title: "Notifications", description: "Test browser notification permission and response.", icon: Bell },
+  { id: "SCREEN_SHARING", title: "Screen sharing", description: "Share a screen you select, with a visible preview and stop control.", icon: Monitor },
+  { id: "INTERACTION_TRACKING", title: "Interaction signals", description: "Record coarse button choices, scroll milestones and tab visibility. Never typed content.", icon: MousePointer2 },
+  { id: "REMOTE_SUPPORT", title: "Remote assist (view-only)", description: "A separate invitation is required for a visible, participant-approved screen-viewing session. No remote control.", icon: Unplug },
+  { id: "CAMERA", title: "Camera permission test", description: "Test the browser permission prompt. No image or video is uploaded or stored.", icon: Camera },
+] as const;
+
+const dataFields = [
+  { id: "USAGE_EVENTS", title: "Basic usage events", description: "Page-view milestones and approved lab navigation events. No URL query strings or form contents.", icon: Activity },
+  { id: "INTERACTION_SIGNALS", title: "Coarse interaction signals", description: "Button/choice categories, scroll milestones, tab visibility and coarse elapsed-time bands. No keystrokes or typed text.", icon: MousePointer2 },
+  { id: "COARSE_DEVICE_PROFILE", title: "Coarse device profile", description: "Browser family, operating-system family, device class and screen-size class. No unique fingerprint.", icon: Laptop },
+  { id: "PERMISSION_OUTCOMES", title: "Permission outcomes", description: "Whether a requested browser permission was allowed, denied or dismissed. No camera/screen content.", icon: ShieldCheck },
 ] as const;
 
 type CapabilityId = typeof capabilities[number]["id"];
+type DataFieldId = typeof dataFields[number]["id"];
 
 export function ConsentGate() {
   const router = useRouter();
   const [accepted, setAccepted] = useState(false);
   const [selected, setSelected] = useState<CapabilityId[]>([]);
+  const [approvedDataFields, setApprovedDataFields] = useState<DataFieldId[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  function toggle(id: CapabilityId) {
+  function toggleCapability(id: CapabilityId) {
     setSelected((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
+  }
+  function toggleDataField(id: DataFieldId) {
+    setApprovedDataFields((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
   }
 
   async function startExperiment() {
@@ -32,7 +44,7 @@ export function ConsentGate() {
     try {
       const response = await fetch("/api/simulation/session", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ accepted: true, policyVersion: POLICY_VERSION, capabilities: selected }),
+        body: JSON.stringify({ accepted: true, policyVersion: POLICY_VERSION, capabilities: selected, approvedDataFields }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "Unable to start the experiment.");
@@ -44,32 +56,40 @@ export function ConsentGate() {
   }
 
   return <main className="sim-page"><div className="sim-shell">
-    <header className="sim-brand"><span className="sim-brand-mark"><Fingerprint size={22}/></span><span>PHANTOM <b>TRACE</b><small>DEVICE SECURITY EXPERIMENT LAB</small></span><span className="sim-lab-pill"><i/> PARTICIPANT PORTAL</span></header>
+    <header className="sim-brand"><span className="sim-brand-mark"><Fingerprint size={22}/></span><span>PHANTOM <b>TRACE</b><small>VOLUNTEER SECURITY RESEARCH LAB</small></span><span className="sim-lab-pill"><i/> PARTICIPANT PORTAL</span></header>
     <section className="consent-card experiment-consent-card">
       <div className="sim-eyebrow"><CheckCircle2 size={14}/> VOLUNTARY RESEARCH PARTICIPATION</div>
       <h1>Your device.<br/><span>Your permission.</span></h1>
-      <p className="sim-lead">PHANTOM TRACE studies how people respond to device permission requests and interactive security prompts. You choose which activities to join. You may decline any capability and still enter the lab.</p>
+      <p className="sim-lead">This is a volunteer study on device-security awareness. Opening this page does not authorize data collection. Review each data category and optional activity below. You may decline optional collection and still enter the lab.</p>
 
       <div className="experiment-notice">
-        <article><strong>What the lab records</strong><p>A random participant code, session timestamps, selected consent choices, and permission outcomes. If you separately opt into Interaction signals, the lab records button/choice actions, page-scroll milestones, tab visibility, idle/return events, and coarse response-time bands — never typed text or field values.</p></article>
-        <article><strong>What the lab does not collect</strong><p>Passwords, OTPs, typed text, personal files, full IP addresses, precise location, or hidden device fingerprints. Camera and screen content are not recorded by this consent workflow.</p></article>
-        <article><strong>Important distinction</strong><p>Choosing an activity below records research consent only. Screen sharing still requires a separate invitation, your approval, and the browser screen picker. Researchers can view the selected screen but cannot control your mouse, keyboard, files, camera, or operating system. You can stop sharing at any time. Temporary connection setup messages may include network-address metadata and are deleted when the session ends.</p></article>
+        <article><strong>Always recorded for an active session</strong><p>A random participant/session reference, campaign reference, consent policy version, consent and withdrawal timestamps, session expiry, and security audit events. These operational records are required to manage your session and prove your choices. They do not include your name, passwords or personal content.</p></article>
+        <article><strong>Never collected by this study</strong><p>Passwords, OTPs, recovery codes, cookies, access tokens, payment details, keystrokes, clipboard contents, private messages, personal files, browsing history, precise location, raw IP addresses or persistent device fingerprints. We do not silently capture camera or screen content.</p></article>
+        <article><strong>How withdrawal works</strong><p>You can withdraw each approved data category or activity from your participant control panel, or end the entire session. Withdrawal stops future collection for that category. Browser permissions and screen sharing have separate visible controls and must be stopped independently.</p></article>
       </div>
 
-      <div className="capability-heading"><div><strong>Choose experiment activities</strong><span>Every item is optional. You can change your mind.</span></div><span>{selected.length} / {capabilities.length}</span></div>
-      <div className="capability-list">{capabilities.map(({ id, title, description, icon: Icon }) => <label className={`capability-option ${selected.includes(id) ? "selected" : ""}`} key={id}>
-        <input type="checkbox" checked={selected.includes(id)} onChange={() => toggle(id)}/>
+      <div className="capability-heading"><div><strong>1. Choose data categories</strong><span>Each category is optional and separately recorded.</span></div><span>{approvedDataFields.length} / {dataFields.length}</span></div>
+      <div className="capability-list">{dataFields.map(({ id, title, description, icon: Icon }) => <label className={`capability-option ${approvedDataFields.includes(id) ? "selected" : ""}`} key={id}>
+        <input type="checkbox" checked={approvedDataFields.includes(id)} onChange={() => toggleDataField(id)}/>
         <span className="capability-icon"><Icon size={18}/></span>
         <span className="capability-copy"><strong>{title}</strong><small>{description}</small></span>
         <span className="capability-check"><CheckCircle2 size={17}/></span>
       </label>)}</div>
 
-      <label className="consent-check"><input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)}/><span>I have read the experiment notice and voluntarily agree to create a pseudonymous research session. I understand that each device permission will be requested separately.</span></label>
+      <div className="capability-heading"><div><strong>2. Choose optional experiment activities</strong><span>These do not automatically authorize the data categories above.</span></div><span>{selected.length} / {capabilities.length}</span></div>
+      <div className="capability-list">{capabilities.map(({ id, title, description, icon: Icon }) => <label className={`capability-option ${selected.includes(id) ? "selected" : ""}`} key={id}>
+        <input type="checkbox" checked={selected.includes(id)} onChange={() => toggleCapability(id)}/>
+        <span className="capability-icon"><Icon size={18}/></span>
+        <span className="capability-copy"><strong>{title}</strong><small>{description}</small></span>
+        <span className="capability-check"><CheckCircle2 size={17}/></span>
+      </label>)}</div>
+
+      <label className="consent-check"><input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)}/><span>I have read the notice, understand the operational session records and voluntarily agree to participate. Only the optional data categories and activities I selected may be collected.</span></label>
       {error && <p className="sim-error" role="alert">{error}</p>}
-      <button className="sim-primary" disabled={!accepted || busy} onClick={startExperiment}>{busy ? "Preparing your session…" : "Agree and enter experiment lab"} <ArrowRight size={16}/></button>
+      <button className="sim-primary" disabled={!accepted || busy} onClick={startExperiment}>{busy ? "Preparing your session…" : "Save choices and enter volunteer lab"} <ArrowRight size={16}/></button>
       <a className="sim-decline" href="/simulation/learn?declined=1">I do not want to participate</a>
       <p className="sim-version">NOTICE VERSION {POLICY_VERSION} · SESSION EXPIRES AFTER 2 HOURS · WITHDRAW ANYTIME</p>
     </section>
-    <footer className="sim-footer"><span>PHANTOM TRACE · CONTROLLED DEVICE SECURITY RESEARCH</span><span>CONSENT IS GRANULAR AND REVOCABLE</span></footer>
+    <footer className="sim-footer"><span>PHANTOM TRACE · CONTROLLED VOLUNTEER RESEARCH</span><span>GRANULAR CONSENT · NO SECRET COLLECTION</span></footer>
   </div></main>;
 }
